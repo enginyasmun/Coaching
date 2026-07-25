@@ -1947,6 +1947,27 @@ WEEK_GUIDES = {1: {'estimated_time': '4 to 6 hours',
 
 def build_guided_lab(project, week_number, research_topic, linkedin_topic):
     project = dict(project)
+
+    # The curriculum route returns project fields with project_* aliases because
+    # the same query also includes week fields. Normalize those aliases so this
+    # builder works with both a direct projects row and a joined week/project row.
+    if not project.get("number"):
+        project["number"] = project.get("project_number")
+    if not project.get("title"):
+        project["title"] = project.get("project_title")
+    if not project.get("summary"):
+        project["summary"] = project.get("project_summary")
+
+    required = (
+        "number", "title", "summary", "industry", "entities", "personas",
+        "process", "integration", "workspace", "agent",
+    )
+    missing = [field for field in required if not project.get(field)]
+    if missing:
+        raise ValueError(
+            "Guided lab project context is missing: " + ", ".join(missing)
+        )
+
     context = _context(project, week_number)
     blueprint = WEEK_GUIDES[week_number]
     guide = _format(blueprint, context)
