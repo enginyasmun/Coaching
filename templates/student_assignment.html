@@ -17,6 +17,7 @@
   <aside class="assignment-sidebar">
     <article class="panel sticky-panel">
       <span class="panel-kicker">ASSIGNMENT DETAILS</span>
+      <a class="guided-lab-return" href="{{ url_for('curriculum_week', week_number=assignment.week_number, project=assignment.project_id) }}#guided-lab">← Open the step-by-step guide</a>
       <h2>Required deliverable</h2>
       <p>{{ assignment.display_deliverable }}</p>
       <div class="detail-list">

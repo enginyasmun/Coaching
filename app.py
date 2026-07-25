@@ -12,6 +12,8 @@ import hashlib
 import secrets
 from werkzeug.utils import secure_filename
 
+from guided_labs import build_guided_lab
+
 BASE_DIR = Path(__file__).resolve().parent
 DB_PATH = Path(os.environ.get("DATABASE_PATH", BASE_DIR / "academy.db"))
 UPLOAD_DIR = Path(os.environ.get("UPLOAD_DIR", BASE_DIR / "uploads"))
@@ -364,6 +366,7 @@ def curriculum_week(week_number):
         """
         SELECT w.*,p.id AS project_id,p.project_number,p.industry,
                p.title AS project_title,p.summary AS project_summary,p.accent,
+               p.entities,p.personas,p.process,p.integration,p.workspace,p.agent,
                pm.title AS milestone_title,pm.instructions AS milestone_instructions,
                pm.deliverable AS milestone_deliverable,pm.is_final
         FROM weeks w
@@ -386,7 +389,18 @@ def curriculum_week(week_number):
         """,
         (week_number,),
     )
-    return render_template("week_detail.html", week=week, assignments=assignments)
+    guided_lab = build_guided_lab(
+        week,
+        week_number,
+        week["research_topic"],
+        week["linkedin_topic"],
+    )
+    return render_template(
+        "week_detail.html",
+        week=week,
+        assignments=assignments,
+        guided_lab=guided_lab,
+    )
 
 
 @app.route("/student")
@@ -488,7 +502,7 @@ def student_assignment(assignment_id):
     assignment = query_one(
         """
         SELECT a.*,w.week_number,w.title AS week_title,w.topics,
-               p.project_number,p.industry,p.title AS project_title,
+               p.id AS project_id,p.project_number,p.industry,p.title AS project_title,
                CASE WHEN a.category IN ('Hands-On','Capstone')
                     THEN pm.title ELSE a.title END AS display_title,
                CASE WHEN a.category IN ('Hands-On','Capstone')

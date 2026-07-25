@@ -2,22 +2,233 @@
 {% block title %}Week {{ week.week_number }} | Developer Academy{% endblock %}
 {% block content %}
 <a class="breadcrumb" href="{{ url_for('curriculum', project=week.project_id) }}">← 16-week plan</a>
-<section class="week-hero stage-{{ week.stage|lower|replace(' ','-') }}"><span class="week-hero-number">{{ '%02d'|format(week.week_number) }}</span><div><span class="page-kicker">{{ week.stage }}</span><h1>{{ week.milestone_title }}</h1><p>{{ week.milestone_instructions }}</p></div></section>
-<section class="project-context-card project-{{ week.accent }}"><div><span>{{ week.industry|upper }} · WEEK {{ week.week_number }} OF 16</span><h2>{{ week.project_title }}</h2><p>{{ week.project_summary }}</p></div><a class="button secondary" href="{{ url_for('projects') }}">View project choices</a></section>
-<section class="week-info-grid">
-  <article class="panel info-panel"><span class="panel-icon">▦</span><div><span class="panel-kicker">REQUIRED PROJECT OUTPUT</span><h2>Milestone deliverable</h2><p>{{ week.milestone_deliverable }}</p></div></article>
-  <article class="panel info-panel"><span class="panel-icon amber-icon">✓</span><div><span class="panel-kicker">WEEKLY RHYTHM</span><h2>Three connected deliverables</h2><ul class="check-list"><li>Project build or final application</li><li>Independent technical research</li><li>Professional LinkedIn post</li></ul></div></article>
+
+<section class="week-hero stage-{{ week.stage|lower|replace(' ','-') }}">
+  <span class="week-hero-number">{{ '%02d'|format(week.week_number) }}</span>
+  <div>
+    <span class="page-kicker">{{ week.stage }}</span>
+    <h1>{{ week.milestone_title }}</h1>
+    <p>{{ week.milestone_instructions }}</p>
+  </div>
 </section>
-<div class="section-row"><div><span class="panel-kicker">WEEK {{ week.week_number }}</span><h2>Assignments</h2></div><span class="assignment-count">3 deliverables</span></div>
+
+<section class="project-context-card project-{{ week.accent }}">
+  <div>
+    <span>{{ week.industry|upper }} · WEEK {{ week.week_number }} OF 16</span>
+    <h2>{{ week.project_title }}</h2>
+    <p>{{ week.project_summary }}</p>
+  </div>
+  <a class="button secondary" href="{{ url_for('projects') }}">View project choices</a>
+</section>
+
+<section class="guided-lab-shell" id="guided-lab" data-lab-id="{{ guided_lab.lab_id }}">
+  <header class="guided-lab-header">
+    <div>
+      <span class="guided-label">STEP-BY-STEP HANDS-ON LAB</span>
+      <h2>{{ guided_lab.title }}</h2>
+      <p>Follow every step in order. The build path is provided. Your job is to execute it carefully, test the result, understand why each action matters, and record evidence.</p>
+    </div>
+    <div class="lab-progress-panel">
+      <strong data-lab-progress-text>0 of {{ guided_lab.steps|length }} steps</strong>
+      <span>{{ guided_lab.estimated_time }}</span>
+      <div class="lab-progress-track"><i data-lab-progress-bar style="width:0%"></i></div>
+    </div>
+  </header>
+
+  <div class="lab-overview-grid">
+    <article class="lab-overview-card">
+      <span class="lab-overview-icon">◎</span>
+      <div>
+        <small>LEARNING OBJECTIVES</small>
+        <ul>
+          {% for objective in guided_lab.objectives %}<li>{{ objective }}</li>{% endfor %}
+        </ul>
+      </div>
+    </article>
+    <article class="lab-overview-card">
+      <span class="lab-overview-icon tools-icon">⌘</span>
+      <div>
+        <small>TOOLS YOU WILL USE</small>
+        <div class="tool-chip-row">
+          {% for tool in guided_lab.tools %}<span>{{ tool }}</span>{% endfor %}
+        </div>
+      </div>
+    </article>
+    <article class="lab-overview-card prerequisites-card">
+      <span class="lab-overview-icon prereq-icon">✓</span>
+      <div>
+        <small>BEFORE YOU START</small>
+        <ul>
+          {% for item in guided_lab.prerequisites %}<li>{{ item }}</li>{% endfor %}
+        </ul>
+      </div>
+    </article>
+  </div>
+
+  <div class="guided-step-list">
+    {% for step in guided_lab.steps %}
+    <article class="guided-step" data-guided-step="{{ loop.index }}">
+      <div class="guided-step-rail">
+        <span class="guided-step-number">{{ '%02d'|format(loop.index) }}</span>
+        <label class="guided-complete-control">
+          <input type="checkbox" data-lab-step-check="{{ loop.index }}">
+          <span aria-hidden="true">✓</span>
+          <em>Complete</em>
+        </label>
+      </div>
+
+      <details class="guided-step-details" {% if loop.first %}open{% endif %}>
+        <summary>
+          <span>
+            <small>STEP {{ loop.index }} OF {{ guided_lab.steps|length }}</small>
+            <strong>{{ step.title }}</strong>
+            <em>{{ step.purpose }}</em>
+          </span>
+          <i aria-hidden="true">+</i>
+        </summary>
+
+        <div class="guided-step-body">
+          {% if step.caution %}
+          <div class="lab-caution"><strong>Important</strong><p>{{ step.caution }}</p></div>
+          {% endif %}
+
+          <ol class="guided-actions">
+            {% for action in step.actions %}
+            <li><span>{{ action }}</span></li>
+            {% endfor %}
+          </ol>
+
+          {% if step.commands %}
+          <div class="command-group">
+            <div class="command-group-title"><span>TERMINAL COMMANDS</span><button type="button" data-copy-command-group>Copy all</button></div>
+            <pre><code>{% for command in step.commands %}{{ command }}
+{% endfor %}</code></pre>
+          </div>
+          {% endif %}
+
+          <div class="step-verification-grid">
+            <div class="checkpoint-box">
+              <small>CHECK YOUR WORK</small>
+              <strong>Expected checkpoint</strong>
+              <p>{{ step.checkpoint }}</p>
+            </div>
+            <div class="evidence-box">
+              <small>SAVE THIS EVIDENCE</small>
+              <strong>What to submit</strong>
+              <p>{{ step.evidence }}</p>
+            </div>
+          </div>
+        </div>
+      </details>
+    </article>
+    {% endfor %}
+  </div>
+
+  <section class="lab-final-check">
+    <div>
+      <span class="guided-label">HANDS-ON CHALLENGE CHECK</span>
+      <h3>Do not submit until every statement is true.</h3>
+    </div>
+    <ul>
+      {% for item in guided_lab.final_check %}<li>{{ item }}</li>{% endfor %}
+    </ul>
+    <a class="button" href="#assignments">Go to submission cards →</a>
+  </section>
+</section>
+
+<section class="research-learning-lab" id="research-lab">
+  <header class="research-lab-header">
+    <div>
+      <span class="research-label">GUIDED RESEARCH LAB</span>
+      <h2>Learn how to research: {{ guided_lab.research.title }}</h2>
+      <p>{{ guided_lab.research.goal }}</p>
+    </div>
+    <span class="research-time">{{ guided_lab.research.estimated_time }}</span>
+  </header>
+
+  <div class="research-query-box">
+    <div>
+      <small>START WITH THESE SEARCHES</small>
+      <p>Use the searches as written, then refine them based on terminology found in official sources.</p>
+    </div>
+    <div class="research-query-list">
+      {% for query in guided_lab.research.search_queries %}
+      <code>{{ query }}</code>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="research-step-grid">
+    {% for research_step in guided_lab.research.steps %}
+    <article>
+      <span>{{ '%02d'|format(loop.index) }}</span>
+      <h3>{{ research_step.title }}</h3>
+      <ol>
+        {% for instruction in research_step.instructions %}<li>{{ instruction }}</li>{% endfor %}
+      </ol>
+      <div class="research-output"><small>OUTPUT</small><p>{{ research_step.output }}</p></div>
+    </article>
+    {% endfor %}
+  </div>
+
+  <div class="source-quality-card">
+    <div><span>QUALITY GATE</span><h3>Keep a source only when it passes this scorecard.</h3></div>
+    <ul>{% for item in guided_lab.research.source_scorecard %}<li>{{ item }}</li>{% endfor %}</ul>
+  </div>
+</section>
+
+<section class="linkedin-learning-lab" id="linkedin-lab">
+  <header>
+    <div class="linkedin-lab-icon">in</div>
+    <div>
+      <span>GUIDED LINKEDIN LAB</span>
+      <h2>{{ guided_lab.linkedin.title }}</h2>
+      <p>Build professional communication from the technical work completed this week.</p>
+    </div>
+    <em>{{ guided_lab.linkedin.estimated_time }}</em>
+  </header>
+  <div class="linkedin-lab-grid">
+    <article>
+      <small>POST-BUILDING STEPS</small>
+      <ol>{% for item in guided_lab.linkedin.steps %}<li>{{ item }}</li>{% endfor %}</ol>
+    </article>
+    <article class="linkedin-template-card">
+      <small>USE THIS POST STRUCTURE</small>
+      <ol>{% for item in guided_lab.linkedin.template %}<li>{{ item }}</li>{% endfor %}</ol>
+    </article>
+  </div>
+</section>
+
+<div class="section-row" id="assignments">
+  <div><span class="panel-kicker">WEEK {{ week.week_number }}</span><h2>Submit the three deliverables</h2></div>
+  <span class="assignment-count">3 deliverables</span>
+</div>
+
 <section class="assignment-grid">
 {% for a in assignments %}
-<article class="assignment-card-modern {{ a.category|lower|replace(' ','-') }}">
-  <div class="assignment-card-head"><span class="assignment-icon">{% if a.category == 'Hands-On' %}&lt;/&gt;{% elif a.category == 'Research' %}R{% elif a.category == 'LinkedIn' %}in{% else %}★{% endif %}</span><span class="pill {{ a.category|lower|replace(' ','-') }}">{{ 'Final Project' if a.category == 'Capstone' else a.category }}</span></div>
-  <h3>{% if a.category in ['Hands-On','Capstone'] %}{{ week.milestone_title }}{% else %}{{ a.title }}{% endif %}</h3>
-  <p>{% if a.category in ['Hands-On','Capstone'] %}{{ week.milestone_instructions }}{% else %}{{ a.instructions }}{% endif %}</p>
-  <div class="deliverable-modern"><small>REQUIRED DELIVERABLE</small><span>{% if a.category in ['Hands-On','Capstone'] %}{{ week.milestone_deliverable }}{% else %}{{ a.deliverable }}{% endif %}</span></div>
-  {% if current_user.role == 'student' %}<a class="button secondary full" href="{{ url_for('student_assignment', assignment_id=a.id) }}">Open assignment</a>{% endif %}
-</article>
+  <article class="assignment-card-modern {{ a.category|lower|replace(' ','-') }}">
+    <div class="assignment-card-head">
+      <span class="assignment-icon">{% if a.category == 'Hands-On' %}&lt;/&gt;{% elif a.category == 'Research' %}R{% elif a.category == 'LinkedIn' %}in{% else %}★{% endif %}</span>
+      <span class="pill {{ a.category|lower|replace(' ','-') }}">{{ 'Final Project' if a.category == 'Capstone' else a.category }}</span>
+    </div>
+    <h3>{% if a.category in ['Hands-On','Capstone'] %}{{ week.milestone_title }}{% else %}{{ a.title }}{% endif %}</h3>
+    <p>
+      {% if a.category in ['Hands-On','Capstone'] %}
+        Complete the guided hands-on lab above and submit the required evidence.
+      {% elif a.category == 'Research' %}
+        Follow the guided research method above before writing the final paper.
+      {% else %}
+        Follow the guided LinkedIn method above and submit the draft before publishing.
+      {% endif %}
+    </p>
+    <div class="deliverable-modern">
+      <small>REQUIRED DELIVERABLE</small>
+      <span>{% if a.category in ['Hands-On','Capstone'] %}{{ week.milestone_deliverable }}{% else %}{{ a.deliverable }}{% endif %}</span>
+    </div>
+    {% if current_user.role == 'student' %}
+      <a class="button secondary full" href="{{ url_for('student_assignment', assignment_id=a.id) }}">Open assignment</a>
+    {% endif %}
+  </article>
 {% endfor %}
 </section>
 {% endblock %}
