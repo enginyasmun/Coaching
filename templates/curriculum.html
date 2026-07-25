@@ -2,20 +2,27 @@
 {% block title %}Curriculum | Developer Academy{% endblock %}
 {% block content %}
 <section class="curriculum-hero">
-  <div><span class="page-kicker">COMPLETE PROGRAM</span><h1>20 weeks from platform fundamentals to modern agent development.</h1><p>Each week combines technical learning, hands-on implementation, independent research, and professional communication.</p></div>
-  <div class="curriculum-summary"><div><strong>20</strong><span>Weeks</span></div><div><strong>4</strong><span>Learning stages</span></div><div><strong>60</strong><span>Core assignments</span></div></div>
+  <div><span class="page-kicker">COMPLETE PROGRAM</span><h1>Twenty weeks organized around five production-style applications.</h1><p>Each week combines technical learning, a project-build milestone, independent research, and professional communication.</p></div>
+  <div class="curriculum-summary"><div><strong>20</strong><span>Weeks</span></div><div><strong>5</strong><span>Industry projects</span></div><div><strong>65</strong><span>Total assignments</span></div></div>
 </section>
 
-<div class="stage-legend"><span><i class="stage-dot foundation"></i>Platform Foundation</span><span><i class="stage-dot core"></i>Core Development</span><span><i class="stage-dot engineering"></i>Engineering Practices</span><span><i class="stage-dot ai"></i>AI and Agents</span></div>
-
-<section class="week-grid modern-week-grid">
+{% for project in projects %}
+<section class="curriculum-project-section">
+  <div class="curriculum-project-heading">
+    <div><span>PROJECT {{ '%02d'|format(project.project_number) }} · {{ project.industry|upper }}</span><h2>{{ project.title }}</h2><p>{{ project.summary }}</p></div>
+    <a class="text-link" href="{{ url_for('projects') }}">View project roadmap</a>
+  </div>
+  <div class="week-grid modern-week-grid project-week-grid">
   {% for week in weeks %}
-  <a class="week-card stage-{{ week.stage|lower|replace(' ','-') }}" href="{{ url_for('curriculum_week', week_number=week.week_number) }}">
-    <div class="week-card-top"><span class="week-number">{{ '%02d'|format(week.week_number) }}</span><span class="stage-pill">{{ week.stage }}</span></div>
-    <h3>{{ week.title }}</h3>
-    <p>{{ week.topics[:175] }}{% if week.topics|length > 175 %}…{% endif %}</p>
-    <div class="week-card-foot"><span>3 assignments</span><strong>Explore week →</strong></div>
-  </a>
+    {% if week.project_number == project.project_number %}
+    <a class="week-card stage-{{ week.stage|lower|replace(' ','-') }}" href="{{ url_for('curriculum_week', week_number=week.week_number) }}">
+      <div class="week-card-top"><span class="week-number">{{ '%02d'|format(week.week_number) }}</span><span class="stage-pill">{{ week.stage }}</span></div>
+      <h3>{{ week.title }}</h3><p>{{ week.topics[:150] }}{% if week.topics|length > 150 %}…{% endif %}</p>
+      <div class="week-card-foot"><span>{% if week.week_number == project.week_end %}4 assignments · final project{% else %}3 assignments{% endif %}</span><strong>Explore week →</strong></div>
+    </a>
+    {% endif %}
   {% endfor %}
+  </div>
 </section>
+{% endfor %}
 {% endblock %}

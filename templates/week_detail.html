@@ -3,24 +3,32 @@
 {% block content %}
 <a class="breadcrumb" href="{{ url_for('curriculum') }}">← Curriculum</a>
 <section class="week-hero stage-{{ week.stage|lower|replace(' ','-') }}">
-  <div class="week-hero-number">{{ '%02d'|format(week.week_number) }}</div>
-  <div><span class="page-kicker">{{ week.stage|upper }}</span><h1>{{ week.title }}</h1><p>A focused week of technical instruction, practical implementation, independent research, and professional communication.</p></div>
+  <span class="week-hero-number">{{ '%02d'|format(week.week_number) }}</span>
+  <div><span class="page-kicker">{{ week.stage }}</span><h1>{{ week.title }}</h1><p>{{ week.topics }}</p></div>
+</section>
+
+<section class="project-context-card project-{{ week.accent }}">
+  <div><span>PROJECT {{ '%02d'|format(week.project_number) }} · {{ week.industry|upper }}</span><h2>{{ week.project_title }}</h2><p>{{ week.project_summary }}</p></div>
+  <a class="button secondary" href="{{ url_for('projects') }}">View all projects</a>
 </section>
 
 <section class="week-info-grid">
-  <article class="panel info-panel"><span class="panel-icon"><svg viewBox="0 0 24 24"><path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm1 4v2h12V7H6Zm0 4v2h12v-2H6Zm0 4v2h8v-2H6Z"/></svg></span><div><span class="panel-kicker">TOPICS</span><h2>What you will learn</h2><p>{{ week.topics }}</p></div></article>
-  <article class="panel info-panel"><span class="panel-icon amber-icon"><svg viewBox="0 0 24 24"><path d="m9 16.2-3.5-3.5L4 14.2l5 5L20 8.2 18.5 6.7 9 16.2Z"/></svg></span><div><span class="panel-kicker">WEEKLY OUTCOMES</span><h2>What you will deliver</h2><ul class="check-list"><li>Technical learning notes</li><li>Hands-on implementation</li><li>Research homework</li><li>Mentor-reviewed LinkedIn post</li></ul></div></article>
+  <article class="panel info-panel"><span class="panel-icon">▦</span><div><span class="panel-kicker">PROJECT MILESTONE</span><h2>Build one part of the application</h2><p>The hands-on assignment is not isolated practice. It becomes part of the final industry application.</p></div></article>
+  <article class="panel info-panel"><span class="panel-icon amber-icon">✓</span><div><span class="panel-kicker">WEEKLY OUTCOMES</span><h2>What you will deliver</h2><ul class="check-list"><li>Technical learning notes</li><li>Project-build milestone</li><li>Research homework</li><li>LinkedIn post</li>{% if assignments|selectattr('category','equalto','Capstone')|list %}<li>Final application demonstration</li>{% endif %}</ul></div></article>
 </section>
 
-<div class="section-row"><div><span class="panel-kicker">REQUIRED WORK</span><h2>Week {{ week.week_number }} assignments</h2></div><span class="assignment-count">{{ assignments|length }} deliverables</span></div>
-<section class="assignment-grid">
-  {% for a in assignments %}
+<div class="section-row"><div><span class="panel-kicker">WEEK {{ week.week_number }}</span><h2>Assignments</h2></div><span class="assignment-count">{{ assignments|length }} deliverables</span></div>
+<section class="assignment-grid {% if assignments|length == 4 %}four-assignment-grid{% endif %}">
+{% for a in assignments %}
   <article class="assignment-card-modern {{ a.category|lower|replace(' ','-') }}">
-    <div class="assignment-card-head"><span class="assignment-icon">{% if a.category == 'Hands-On' %}&lt;/&gt;{% elif a.category == 'Research' %}R{% else %}in{% endif %}</span><span class="pill {{ a.category|lower|replace(' ','-') }}">{{ a.category }}</span></div>
+    <div class="assignment-card-head">
+      <span class="assignment-icon">{% if a.category == 'Hands-On' %}&lt;/&gt;{% elif a.category == 'Research' %}R{% elif a.category == 'LinkedIn' %}in{% else %}★{% endif %}</span>
+      <span class="pill {{ a.category|lower|replace(' ','-') }}">{{ a.category }}</span>
+    </div>
     <h3>{{ a.title }}</h3><p>{{ a.instructions }}</p>
     <div class="deliverable-modern"><small>REQUIRED DELIVERABLE</small><span>{{ a.deliverable }}</span></div>
-    {% if current_user.role == 'student' %}<a class="button secondary full" href="{{ url_for('student_assignment', assignment_id=a.id) }}">Open assignment →</a>{% endif %}
+    {% if current_user.role == 'student' %}<a class="button secondary full" href="{{ url_for('student_assignment', assignment_id=a.id) }}">Open assignment</a>{% endif %}
   </article>
-  {% endfor %}
+{% endfor %}
 </section>
 {% endblock %}

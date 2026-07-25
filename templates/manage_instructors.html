@@ -2,100 +2,44 @@
 {% block title %}Instructors | Developer Academy{% endblock %}
 {% block content %}
 <section class="dashboard-hero compact-hero">
-  <div>
-    <span class="page-kicker">TEAM MANAGEMENT</span>
-    <h1>Instructors</h1>
-    <p>Create instructor accounts and control who can manage students, assignments, submissions, grades, and feedback.</p>
-  </div>
-  <a class="button ghost" href="{{ url_for('manage_students') }}">Manage students</a>
+  <div><span class="page-kicker">ACADEMY ADMINISTRATION</span><h1>Instructors</h1><p>Create instructor accounts, review assignment ownership, and control administrative access.</p></div>
+  <a class="button ghost" href="{{ url_for('manage_students') }}">Assign students</a>
 </section>
 
 <section class="management-grid">
   <form class="panel create-student-form" method="post">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-    <div class="form-heading-inline">
-      <div>
-        <span class="panel-kicker">NEW INSTRUCTOR</span>
-        <h2>Add an instructor</h2>
-        <p>Create a full-access academy account.</p>
-      </div>
-    </div>
-
-    <label class="field-label">
-      Full name
-      <input type="text" name="name" required placeholder="Instructor name">
+    <div class="form-heading-inline"><div><span class="panel-kicker">NEW INSTRUCTOR</span><h2>Add an instructor</h2><p>Regular instructors see only students assigned to them.</p></div></div>
+    <label class="field-label">Full name<input type="text" name="name" required placeholder="Instructor name"></label>
+    <label class="field-label">Email address<input type="email" name="email" required placeholder="instructor@example.com"></label>
+    <label class="field-label">Temporary password<input type="text" name="password" required placeholder="Create a temporary password"></label>
+    <label class="admin-checkbox">
+      <input type="checkbox" name="is_admin" value="1">
+      <span><strong>Academy administrator</strong><small>Can see all students, assign mentors, and manage instructor accounts.</small></span>
     </label>
-
-    <label class="field-label">
-      Email address
-      <input type="email" name="email" required placeholder="instructor@example.com">
-    </label>
-
-    <label class="field-label">
-      Temporary password
-      <input type="text" name="password" required placeholder="Create a temporary password">
-      <small class="field-help">Send the password privately and ask the instructor to store it securely.</small>
-    </label>
-
     <button class="button full" type="submit">Create instructor account</button>
   </form>
 
   <article class="panel access-panel instructor-access-panel">
-    <span class="access-icon">✦</span>
-    <span class="panel-kicker">FULL ACADEMY ACCESS</span>
-    <h2>Instructor permissions</h2>
-    <p>Every active instructor can administer the academy. Only add people who should see all students and grading information.</p>
-    <div class="access-list">
-      <span>✓ Create and manage students</span>
-      <span>✓ Review every submission</span>
-      <span>✓ Grade and request revisions</span>
-      <span>✓ Create other instructors</span>
-    </div>
+    <span class="access-icon">✦</span><span class="panel-kicker">TWO ACCESS LEVELS</span><h2>Private by default</h2>
+    <p>Regular instructors receive a private workspace containing only their assigned students. Academy administrators retain complete oversight.</p>
+    <div class="access-list"><span>✓ Instructor-specific queues</span><span>✓ Protected student files</span><span>✓ Administrator assignment control</span><span>✓ No cross-instructor grading</span></div>
   </article>
 </section>
 
 <section class="panel table-panel">
-  <div class="table-toolbar">
-    <div>
-      <span class="panel-kicker">INSTRUCTOR TEAM</span>
-      <h2>{{ instructors|length }} instructors</h2>
-    </div>
-    <label class="search-control">
-      <svg viewBox="0 0 24 24"><path d="m21 20-5.2-5.2a7 7 0 1 0-1.4 1.4L20 21l1-1ZM5 10.5a5.5 5.5 0 1 1 11 0 5.5 5.5 0 0 1-11 0Z"/></svg>
-      <input type="search" placeholder="Search instructors" data-table-search="instructor-roster">
-    </label>
-  </div>
-
+  <div class="table-toolbar"><div><span class="panel-kicker">INSTRUCTOR TEAM</span><h2>{{ instructors|length }} instructors</h2></div><label class="search-control"><svg viewBox="0 0 24 24"><path d="m21 20-5.2-5.2a7 7 0 1 0-1.4 1.4L20 21l1-1ZM5 10.5a5.5 5.5 0 1 1 11 0 5.5 5.5 0 0 1-11 0Z"/></svg><input type="search" placeholder="Search instructors" data-table-search="instructor-roster"></label></div>
   <div class="responsive-table">
     <table id="instructor-roster">
-      <thead>
-        <tr>
-          <th>Instructor</th>
-          <th>Access</th>
-          <th>Created</th>
-          <th>Status</th>
-          <th><span class="sr-only">Action</span></th>
-        </tr>
-      </thead>
+      <thead><tr><th>Instructor</th><th>Access</th><th>Students</th><th>Created</th><th>Status</th><th></th></tr></thead>
       <tbody>
-        {% for instructor in instructors %}
+      {% for instructor in instructors %}
         <tr>
-          <td>
-            <div class="person-cell">
-              <span class="mini-avatar">{{ instructor.name[:1]|upper }}</span>
-              <div>
-                <strong>{{ instructor.name }}</strong>
-                <span class="table-subtitle">{{ instructor.email }}</span>
-              </div>
-            </div>
-          </td>
-          <td><strong class="table-title">Full academy access</strong></td>
+          <td><div class="person-cell"><span class="mini-avatar">{{ instructor.name[:1]|upper }}</span><div><strong>{{ instructor.name }}</strong><span class="table-subtitle">{{ instructor.email }}</span></div></div></td>
+          <td>{% if instructor.is_admin %}<span class="admin-access-badge">Academy admin</span>{% else %}<span class="mentor-access-badge">Assigned students only</span>{% endif %}</td>
+          <td><strong>{{ instructor.assigned_students }}</strong><span class="table-subtitle">assigned students</span></td>
           <td><span class="date-cell">{{ instructor.created_at[:10] if instructor.created_at else '—' }}</span></td>
-          <td>
-            <span class="status {{ 'approved' if instructor.is_active else 'late' }}">
-              <i></i>{{ 'Active' if instructor.is_active else 'Inactive' }}
-            </span>
-          </td>
+          <td><span class="status {{ 'approved' if instructor.is_active else 'late' }}"><i></i>{{ 'Active' if instructor.is_active else 'Inactive' }}</span></td>
           <td>
             {% if instructor.id == current_user.id %}
               <span class="current-account-chip">Current account</span>
@@ -107,7 +51,7 @@
             {% endif %}
           </td>
         </tr>
-        {% endfor %}
+      {% endfor %}
       </tbody>
     </table>
     <div class="table-empty-state" data-empty-for="instructor-roster">No instructors match your search.</div>

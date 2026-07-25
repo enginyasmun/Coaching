@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Industry Projects | Developer Academy{% endblock %}
+{% block content %}
+<section class="curriculum-hero project-hero">
+  <div><span class="page-kicker">PORTFOLIO ROADMAP</span><h1>Five industries. Five complete Salesforce applications.</h1><p>Every weekly hands-on assignment is a build milestone. At the end of each four-week sprint, students consolidate the work into a complete application and final demonstration.</p></div>
+  <div class="curriculum-summary"><div><strong>5</strong><span>Industry applications</span></div><div><strong>20</strong><span>Build milestones</span></div><div><strong>5</strong><span>Final projects</span></div></div>
+</section>
+
+<section class="project-roadmap">
+{% for p in projects %}
+  {% set total = p.total_assignments or 0 %}
+  {% set approved = p.approved_assignments or 0 %}
+  {% set progress = ((approved / total) * 100)|round|int if total else 0 %}
+  <article class="industry-project project-{{ p.accent }}">
+    <div class="project-number-block"><span>PROJECT</span><strong>{{ '%02d'|format(p.project_number) }}</strong></div>
+    <div class="project-main">
+      <div class="project-heading-row">
+        <div><span class="project-industry">{{ p.industry }}</span><h2>{{ p.title }}</h2><p>{{ p.summary }}</p></div>
+        <span class="project-weeks">Weeks {{ p.week_start }}–{{ p.week_end }}</span>
+      </div>
+
+      <div class="milestone-rail">
+      {% for m in milestones %}
+        {% if m.project_id == p.id %}
+          <a href="{{ url_for('curriculum_week', week_number=m.week_number) }}"><span>W{{ m.week_number }}</span><strong>{{ m.build_title|replace('Week ' ~ m.week_number ~ ' Project Build: ', '') }}</strong></a>
+        {% endif %}
+      {% endfor %}
+      </div>
+
+      <div class="project-final">
+        <div><span>FINAL APPLICATION</span><p>{{ p.final_deliverable }}</p></div>
+        {% if current_user.role == 'student' %}
+          <div class="project-progress-box"><strong>{{ progress }}%</strong><span>{{ approved }} of {{ total }} approved</span><div class="progress-track"><i style="width:{{ progress }}%"></i></div></div>
+        {% else %}
+          <a class="button secondary" href="{{ url_for('curriculum_week', week_number=p.week_end) }}">Open final week</a>
+        {% endif %}
+      </div>
+    </div>
+  </article>
+{% endfor %}
+</section>
+{% endblock %}

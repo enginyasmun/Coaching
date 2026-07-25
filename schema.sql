@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS submissions;
 DROP TABLE IF EXISTS assignments;
 DROP TABLE IF EXISTS weeks;
+DROP TABLE IF EXISTS projects;
 DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
@@ -10,19 +11,36 @@ CREATE TABLE users (
     password_hash TEXT NOT NULL,
     role TEXT NOT NULL CHECK(role IN ('student','instructor')),
     cohort TEXT,
+    assigned_instructor_id INTEGER,
+    is_admin INTEGER NOT NULL DEFAULT 0,
     is_active INTEGER NOT NULL DEFAULT 1,
-    created_at TEXT NOT NULL
+    created_at TEXT NOT NULL,
+    FOREIGN KEY (assigned_instructor_id) REFERENCES users(id)
+);
+
+CREATE TABLE projects (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    project_number INTEGER NOT NULL UNIQUE,
+    industry TEXT NOT NULL,
+    title TEXT NOT NULL,
+    summary TEXT NOT NULL,
+    final_deliverable TEXT NOT NULL,
+    week_start INTEGER NOT NULL,
+    week_end INTEGER NOT NULL,
+    accent TEXT NOT NULL
 );
 
 CREATE TABLE weeks (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     week_number INTEGER NOT NULL UNIQUE,
+    project_id INTEGER NOT NULL,
     stage TEXT NOT NULL,
     title TEXT NOT NULL,
     topics TEXT NOT NULL,
     hands_on TEXT NOT NULL,
     research_topic TEXT NOT NULL,
-    linkedin_topic TEXT NOT NULL
+    linkedin_topic TEXT NOT NULL,
+    FOREIGN KEY (project_id) REFERENCES projects(id)
 );
 
 CREATE TABLE assignments (
@@ -62,6 +80,8 @@ CREATE TABLE submissions (
     FOREIGN KEY (graded_by) REFERENCES users(id)
 );
 
+CREATE INDEX idx_users_assigned_instructor ON users(assigned_instructor_id);
+CREATE INDEX idx_weeks_project ON weeks(project_id);
 CREATE INDEX idx_submissions_student ON submissions(student_id);
 CREATE INDEX idx_submissions_status ON submissions(status);
 CREATE INDEX idx_assignments_week ON assignments(week_id);

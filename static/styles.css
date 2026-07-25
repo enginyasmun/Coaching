@@ -2,7 +2,7 @@
   --canvas:#f4f2ec;--surface:#fff;--surface-2:#f8f7f3;--ink:#17201b;--muted:#69726c;--line:#e3e1d9;
   --sage:#285b4b;--sage-2:#377462;--sage-soft:#e4eee9;--amber:#d59a34;--amber-soft:#fff0d5;
   --coral:#d66f52;--coral-soft:#fbe8e2;--charcoal:#1e2923;--charcoal-2:#2d3b33;
-  --research:#786052;--research-soft:#eee7e2;--linkedin:#9d5066;--linkedin-soft:#f5e3e9;
+  --research:#786052;--research-soft:#eee7e2;--linkedin:#0a66c2;--linkedin-soft:#e8f3fc;
   --shadow-sm:0 1px 2px rgba(23,32,27,.05),0 7px 22px rgba(23,32,27,.05);
   --shadow-lg:0 25px 70px rgba(22,31,26,.14);--radius:18px;--radius-lg:28px;--sidebar:274px;
 }
@@ -173,4 +173,220 @@
   .inline-class-form{
     min-width:220px;
   }
+}
+
+
+/* =========================================================
+   Instructor ownership, industry projects, and LinkedIn v4
+   ========================================================= */
+.pill.linkedin{
+  background:#e8f3fc;
+  color:#0a66c2;
+  border:1px solid rgba(10,102,194,.14);
+}
+.assignment-card-modern.linkedin{
+  --type-soft:#e8f3fc;
+  --type-color:#0a66c2;
+}
+.linkedin-field input:focus{
+  border-color:#0a66c2;
+  box-shadow:0 0 0 3px rgba(10,102,194,.11);
+}
+.resource-links a.linkedin-resource{
+  border-color:rgba(10,102,194,.22);
+  background:#f8fbff;
+}
+.resource-links a.linkedin-resource>span{
+  background:#0a66c2;
+  color:#fff;
+  font-family:Arial,sans-serif;
+  letter-spacing:-.04em;
+}
+
+.pill.capstone{
+  background:#fff2cc;
+  color:#825b00;
+  border:1px solid rgba(213,154,52,.25);
+}
+.assignment-card-modern.capstone{
+  --type-soft:#fff2cc;
+  --type-color:#825b00;
+  border-color:rgba(213,154,52,.35);
+  background:linear-gradient(180deg,#fffdf7,#fff);
+}
+.four-assignment-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+.four-assignment-grid .assignment-card-modern{min-height:410px}
+
+.ownership-note{
+  display:flex;
+  gap:10px;
+  padding:13px;
+  margin:0 0 15px;
+  border-radius:13px;
+  background:var(--sage-soft);
+  color:var(--sage);
+}
+.ownership-note>span{font-weight:900}
+.ownership-note strong{display:block;font-size:11px}
+.ownership-note p{font-size:9px;margin:2px 0 0;color:#426a5a}
+
+.inline-mentor-form{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  min-width:210px;
+}
+.inline-mentor-form select{
+  width:145px;
+  min-width:0;
+  margin:0;
+  padding:8px 27px 8px 9px;
+  border-radius:9px;
+  font-size:10px;
+  background:#fbfbf9;
+}
+.admin-checkbox{
+  display:flex;
+  align-items:flex-start;
+  gap:11px;
+  padding:14px;
+  margin:4px 0 18px;
+  border:1px solid var(--line);
+  border-radius:13px;
+  background:#fafaf7;
+  cursor:pointer;
+}
+.admin-checkbox input{
+  width:17px;
+  height:17px;
+  margin:2px 0 0;
+  accent-color:var(--sage);
+}
+.admin-checkbox span{display:flex;flex-direction:column}
+.admin-checkbox strong{font-size:11px}
+.admin-checkbox small{font-size:9px;color:var(--muted);margin-top:2px}
+.admin-access-badge,.mentor-access-badge,.mentor-chip,.assignment-project-chip{
+  display:inline-flex;
+  align-items:center;
+  border-radius:999px;
+  font-size:9px;
+  font-weight:850;
+}
+.admin-access-badge{padding:6px 9px;background:#fff2cc;color:#825b00}
+.mentor-access-badge{padding:6px 9px;background:var(--sage-soft);color:var(--sage)}
+.mentor-chip{margin-top:12px;padding:8px 11px;background:white;border:1px solid var(--line);color:var(--muted)}
+.mentor-chip strong{color:var(--sage);margin-left:4px}
+.assignment-project-chip{margin-top:14px;padding:7px 10px;background:var(--sage-soft);color:var(--sage)}
+
+.project-hero{margin-bottom:22px}
+.project-roadmap{display:grid;gap:18px}
+.industry-project{
+  --project-accent:var(--sage);
+  --project-soft:var(--sage-soft);
+  display:grid;
+  grid-template-columns:120px minmax(0,1fr);
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:24px;
+  overflow:hidden;
+  box-shadow:var(--shadow-sm);
+}
+.project-finance{--project-accent:#285b4b;--project-soft:#e4f0ea}
+.project-healthcare{--project-accent:#23758a;--project-soft:#e2f2f5}
+.project-nonprofit{--project-accent:#9a5d35;--project-soft:#f5e9df}
+.project-manufacturing{--project-accent:#5d6470;--project-soft:#e9ebee}
+.project-services{--project-accent:#6a55a3;--project-soft:#eeeafb}
+.project-number-block{
+  background:var(--project-accent);
+  color:#fff;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  min-height:310px;
+}
+.project-number-block span{font-size:8px;letter-spacing:.16em;font-weight:850;opacity:.7}
+.project-number-block strong{font-family:Georgia,serif;font-size:58px;line-height:1;margin-top:8px}
+.project-main{padding:28px}
+.project-heading-row{display:flex;justify-content:space-between;gap:25px;align-items:flex-start}
+.project-industry{font-size:9px;font-weight:900;letter-spacing:.14em;color:var(--project-accent);text-transform:uppercase}
+.project-heading-row h2{font-size:28px;margin:5px 0 8px}
+.project-heading-row p{font-size:12px;max-width:760px;margin:0}
+.project-weeks{padding:7px 10px;border-radius:999px;background:var(--project-soft);color:var(--project-accent);font-size:9px;font-weight:850;white-space:nowrap}
+.milestone-rail{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:25px 0}
+.milestone-rail a{border:1px solid var(--line);border-radius:13px;padding:12px;display:flex;flex-direction:column;transition:.16s}
+.milestone-rail a:hover{border-color:var(--project-accent);transform:translateY(-1px)}
+.milestone-rail span{font-size:8px;color:var(--project-accent);font-weight:900}
+.milestone-rail strong{font-size:10px;line-height:1.4;margin-top:5px}
+.project-final{display:flex;justify-content:space-between;align-items:center;gap:25px;padding:17px;border-radius:15px;background:var(--project-soft)}
+.project-final>div:first-child{max-width:780px}
+.project-final>div:first-child span{font-size:8px;font-weight:900;letter-spacing:.12em;color:var(--project-accent)}
+.project-final p{font-size:10px;margin:5px 0 0;color:#4c5751}
+.project-progress-box{min-width:170px;text-align:right}
+.project-progress-box>strong{display:block;font-size:24px;color:var(--project-accent)}
+.project-progress-box>span{font-size:8px;color:var(--muted)}
+.project-progress-box .progress-track{margin-top:7px}
+.progress-track i{display:block;height:100%;background:var(--project-accent);border-radius:inherit}
+
+.curriculum-project-section{margin-top:34px}
+.curriculum-project-heading{display:flex;justify-content:space-between;align-items:flex-end;gap:25px;margin-bottom:15px}
+.curriculum-project-heading>div{max-width:820px}
+.curriculum-project-heading span{font-size:9px;color:var(--sage);font-weight:900;letter-spacing:.12em}
+.curriculum-project-heading h2{font-size:28px;margin:5px 0}
+.curriculum-project-heading p{font-size:11px;margin:0}
+.project-week-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+
+.project-context-card{
+  --project-accent:var(--sage);
+  --project-soft:var(--sage-soft);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+  margin:17px 0;
+  padding:22px 25px;
+  border:1px solid color-mix(in srgb,var(--project-accent) 25%,white);
+  border-radius:18px;
+  background:var(--project-soft);
+}
+.project-context-card>div{max-width:830px}
+.project-context-card span{font-size:8px;font-weight:900;letter-spacing:.13em;color:var(--project-accent)}
+.project-context-card h2{font-size:22px;margin:4px 0}
+.project-context-card p{font-size:10px;margin:0}
+
+.student-project-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px}
+.student-project-mini{
+  --project-accent:var(--sage);
+  --project-soft:var(--sage-soft);
+  background:white;
+  border:1px solid var(--line);
+  border-top:4px solid var(--project-accent);
+  border-radius:15px;
+  padding:14px;
+  box-shadow:var(--shadow-sm);
+}
+.student-project-mini>span{display:block;font-size:8px;color:var(--project-accent);font-weight:900;text-transform:uppercase}
+.student-project-mini>strong{display:block;font-size:12px;margin:4px 0 10px}
+.student-project-mini .progress-track{height:6px}
+.student-project-mini small{display:block;font-size:8px;color:var(--muted);margin-top:6px}
+
+@media(max-width:1180px){
+  .four-assignment-grid{grid-template-columns:repeat(2,1fr)}
+  .project-week-grid{grid-template-columns:repeat(2,1fr)}
+  .student-project-strip{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:900px){
+  .industry-project{grid-template-columns:85px minmax(0,1fr)}
+  .project-number-block{min-height:360px}
+  .milestone-rail{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:650px){
+  .four-assignment-grid,.project-week-grid{grid-template-columns:1fr}
+  .industry-project{display:block}
+  .project-number-block{min-height:auto;padding:18px;flex-direction:row;gap:8px}
+  .project-number-block strong{font-size:30px;margin:0}
+  .project-heading-row,.project-final,.curriculum-project-heading,.project-context-card{align-items:flex-start;flex-direction:column}
+  .milestone-rail{grid-template-columns:1fr}
+  .student-project-strip{grid-template-columns:1fr}
+  .inline-mentor-form{min-width:220px}
 }
