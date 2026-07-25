@@ -3,14 +3,12 @@ services:
     name: salesforce-junior-academy
     runtime: python
     buildCommand: pip install -r requirements.txt
-    startCommand: python seed.py && gunicorn --bind 0.0.0.0:$PORT app:app
+    startCommand: python seed.py && gunicorn app:app
     envVars:
       - key: SECRET_KEY
         generateValue: true
-      - key: ADMIN_EMAIL
-        sync: false
       - key: ADMIN_PASSWORD
-        sync: false
+        generateValue: true
       - key: DATABASE_PATH
         value: /var/data/academy.db
       - key: UPLOAD_DIR
