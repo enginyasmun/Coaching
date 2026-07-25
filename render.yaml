@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: salesforce-junior-academy
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python seed.py && gunicorn app:app
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ADMIN_PASSWORD
+        generateValue: true
+      - key: DATABASE_PATH
+        value: /var/data/academy.db
+      - key: UPLOAD_DIR
+        value: /var/data/uploads
+    disk:
+      name: academy-data
+      mountPath: /var/data
+      sizeGB: 1
