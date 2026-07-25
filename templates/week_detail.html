@@ -1,40 +1,26 @@
 {% extends "base.html" %}
-{% block title %}Week {{ week.week_number }}{% endblock %}
+{% block title %}Week {{ week.week_number }} | Developer Academy{% endblock %}
 {% block content %}
-<div class="page-head">
-  <div>
-    <span class="eyebrow">{{ week.stage }}</span>
-    <h1>Week {{ week.week_number }}: {{ week.title }}</h1>
-  </div>
-  <a class="button ghost" href="{{ url_for('curriculum') }}">Back to curriculum</a>
-</div>
-<div class="grid two">
-  <section class="card">
-    <h2>Topics</h2>
-    <p>{{ week.topics }}</p>
-  </section>
-  <section class="card">
-    <h2>Weekly outcomes</h2>
-    <ul>
-      <li>Complete technical learning notes</li>
-      <li>Finish the hands-on assignment</li>
-      <li>Submit the research homework</li>
-      <li>Publish at least one LinkedIn post after review</li>
-    </ul>
-  </section>
-</div>
-<h2 class="section-title">Assignments</h2>
-<div class="grid three">
+<a class="breadcrumb" href="{{ url_for('curriculum') }}">← Curriculum</a>
+<section class="week-hero stage-{{ week.stage|lower|replace(' ','-') }}">
+  <div class="week-hero-number">{{ '%02d'|format(week.week_number) }}</div>
+  <div><span class="page-kicker">{{ week.stage|upper }}</span><h1>{{ week.title }}</h1><p>A focused week of technical instruction, practical implementation, independent research, and professional communication.</p></div>
+</section>
+
+<section class="week-info-grid">
+  <article class="panel info-panel"><span class="panel-icon"><svg viewBox="0 0 24 24"><path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm1 4v2h12V7H6Zm0 4v2h12v-2H6Zm0 4v2h8v-2H6Z"/></svg></span><div><span class="panel-kicker">TOPICS</span><h2>What you will learn</h2><p>{{ week.topics }}</p></div></article>
+  <article class="panel info-panel"><span class="panel-icon amber-icon"><svg viewBox="0 0 24 24"><path d="m9 16.2-3.5-3.5L4 14.2l5 5L20 8.2 18.5 6.7 9 16.2Z"/></svg></span><div><span class="panel-kicker">WEEKLY OUTCOMES</span><h2>What you will deliver</h2><ul class="check-list"><li>Technical learning notes</li><li>Hands-on implementation</li><li>Research homework</li><li>Mentor-reviewed LinkedIn post</li></ul></div></article>
+</section>
+
+<div class="section-row"><div><span class="panel-kicker">REQUIRED WORK</span><h2>Week {{ week.week_number }} assignments</h2></div><span class="assignment-count">{{ assignments|length }} deliverables</span></div>
+<section class="assignment-grid">
   {% for a in assignments %}
-  <article class="card assignment-card">
-    <span class="pill {{ a.category|lower|replace(' ','-') }}">{{ a.category }}</span>
-    <h3>{{ a.title }}</h3>
-    <p>{{ a.instructions }}</p>
-    <div class="deliverable"><strong>Deliverable:</strong> {{ a.deliverable }}</div>
-    {% if current_user.role == 'student' %}
-      <a class="button small" href="{{ url_for('student_assignment', assignment_id=a.id) }}">Open assignment</a>
-    {% endif %}
+  <article class="assignment-card-modern {{ a.category|lower|replace(' ','-') }}">
+    <div class="assignment-card-head"><span class="assignment-icon">{% if a.category == 'Hands-On' %}&lt;/&gt;{% elif a.category == 'Research' %}R{% else %}in{% endif %}</span><span class="pill {{ a.category|lower|replace(' ','-') }}">{{ a.category }}</span></div>
+    <h3>{{ a.title }}</h3><p>{{ a.instructions }}</p>
+    <div class="deliverable-modern"><small>REQUIRED DELIVERABLE</small><span>{{ a.deliverable }}</span></div>
+    {% if current_user.role == 'student' %}<a class="button secondary full" href="{{ url_for('student_assignment', assignment_id=a.id) }}">Open assignment →</a>{% endif %}
   </article>
   {% endfor %}
-</div>
+</section>
 {% endblock %}

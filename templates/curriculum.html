@@ -1,21 +1,21 @@
 {% extends "base.html" %}
-{% block title %}Curriculum{% endblock %}
+{% block title %}Curriculum | Developer Academy{% endblock %}
 {% block content %}
-<div class="page-head">
-  <div>
-    <span class="eyebrow">Complete program</span>
-    <h1>20-week curriculum</h1>
-    <p>Every week combines technical learning, hands-on implementation, independent research, and a professional LinkedIn post.</p>
-  </div>
-</div>
-<div class="week-grid">
+<section class="curriculum-hero">
+  <div><span class="page-kicker">COMPLETE PROGRAM</span><h1>20 weeks from platform fundamentals to modern agent development.</h1><p>Each week combines technical learning, hands-on implementation, independent research, and professional communication.</p></div>
+  <div class="curriculum-summary"><div><strong>20</strong><span>Weeks</span></div><div><strong>4</strong><span>Learning stages</span></div><div><strong>60</strong><span>Core assignments</span></div></div>
+</section>
+
+<div class="stage-legend"><span><i class="stage-dot foundation"></i>Platform Foundation</span><span><i class="stage-dot core"></i>Core Development</span><span><i class="stage-dot engineering"></i>Engineering Practices</span><span><i class="stage-dot ai"></i>AI and Agents</span></div>
+
+<section class="week-grid modern-week-grid">
   {% for week in weeks %}
-  <a class="week-card" href="{{ url_for('curriculum_week', week_number=week.week_number) }}">
-    <span class="week-num">Week {{ week.week_number }}</span>
-    <span class="stage">{{ week.stage }}</span>
+  <a class="week-card stage-{{ week.stage|lower|replace(' ','-') }}" href="{{ url_for('curriculum_week', week_number=week.week_number) }}">
+    <div class="week-card-top"><span class="week-number">{{ '%02d'|format(week.week_number) }}</span><span class="stage-pill">{{ week.stage }}</span></div>
     <h3>{{ week.title }}</h3>
-    <p>{{ week.topics[:170] }}{% if week.topics|length > 170 %}...{% endif %}</p>
+    <p>{{ week.topics[:175] }}{% if week.topics|length > 175 %}…{% endif %}</p>
+    <div class="week-card-foot"><span>3 assignments</span><strong>Explore week →</strong></div>
   </a>
   {% endfor %}
-</div>
+</section>
 {% endblock %}

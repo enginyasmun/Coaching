@@ -1,36 +1,72 @@
 {% extends "base.html" %}
-{% block title %}My Work{% endblock %}
+{% block title %}My Dashboard | Developer Academy{% endblock %}
 {% block content %}
-<div class="page-head">
+{% set approved = summary.approved or 0 %}
+{% set submitted = summary.submitted or 0 %}
+{% set total = summary.total or 0 %}
+{% set progress = ((approved / total) * 100)|round|int if total else 0 %}
+{% set ns = namespace(next_item=None) %}
+{% for r in rows %}{% if ns.next_item is none and r.submission_status != 'Approved' %}{% set ns.next_item = r %}{% endif %}{% endfor %}
+
+<section class="dashboard-hero">
   <div>
-    <span class="eyebrow">Student dashboard</span>
-    <h1>Welcome, {{ current_user.name }}</h1>
-    <p>Track every assignment, submit your work, review feedback, and complete revisions.</p>
+    <span class="page-kicker">STUDENT DASHBOARD</span>
+    <h1>Welcome back, {{ current_user.name.split(' ')[0] }}.</h1>
+    <p>Keep the momentum. Complete your work, review feedback, and move each assignment toward approval.</p>
   </div>
-</div>
-<div class="stats-grid">
-  <div class="stat-card"><span>Total assignments</span><strong>{{ summary.total }}</strong></div>
-  <div class="stat-card"><span>Submitted</span><strong>{{ summary.submitted or 0 }}</strong></div>
-  <div class="stat-card"><span>Approved</span><strong>{{ summary.approved or 0 }}</strong></div>
-  <div class="stat-card"><span>Average score</span><strong>{{ summary.avg_score }}</strong></div>
-</div>
-<div class="table-card">
-<table>
-  <thead>
-    <tr><th>Week</th><th>Assignment</th><th>Type</th><th>Status</th><th>Score</th><th></th></tr>
-  </thead>
-  <tbody>
-    {% for r in rows %}
-    <tr>
-      <td>W{{ r.week_number }}</td>
-      <td><strong>{{ r.title }}</strong><div class="muted">{{ r.week_title }}</div></td>
-      <td><span class="pill {{ r.category|lower|replace(' ','-') }}">{{ r.category }}</span></td>
-      <td><span class="status {{ (r.submission_status or 'not-started')|lower|replace(' ','-') }}">{{ r.submission_status or 'Not Started' }}</span></td>
-      <td>{% if r.score is not none %}{{ r.score }}/{{ r.max_score }}{% else %}—{% endif %}</td>
-      <td><a class="button small" href="{{ url_for('student_assignment', assignment_id=r.id) }}">Open</a></td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-</div>
+  <a class="button" href="{{ url_for('curriculum') }}">View curriculum <svg viewBox="0 0 24 24"><path d="m13 5-1.4 1.4 4.6 4.6H4v2h12.2l-4.6 4.6L13 19l7-7-7-7Z"/></svg></a>
+</section>
+
+<section class="stats-grid modern-stats">
+  <article class="stat-card accent-sage"><div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm1 4v2h12V7H6Zm0 4v2h12v-2H6Zm0 4v2h8v-2H6Z"/></svg></div><div><span>Total assignments</span><strong>{{ total }}</strong><small>Across the 20-week program</small></div></article>
+  <article class="stat-card accent-amber"><div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-1 5v6l5 3 1-1.7-4-2.3V7h-2Z"/></svg></div><div><span>Submitted</span><strong>{{ submitted }}</strong><small>Sent for mentor review</small></div></article>
+  <article class="stat-card accent-coral"><div class="stat-icon"><svg viewBox="0 0 24 24"><path d="m9 16.2-3.5-3.5L4 14.2l5 5L20 8.2 18.5 6.7 9 16.2Z"/></svg></div><div><span>Approved</span><strong>{{ approved }}</strong><small>Completed successfully</small></div></article>
+  <article class="stat-card accent-charcoal"><div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M3 20h18v2H3v-2Zm2-3 4-4 3 3 6-7 2 2-8 9-3-3-2 2-2-2Z"/></svg></div><div><span>Average score</span><strong>{{ summary.avg_score }}</strong><small>Across graded submissions</small></div></article>
+</section>
+
+<section class="dashboard-grid">
+  <article class="panel progress-panel">
+    <div class="panel-heading"><div><span class="panel-kicker">PROGRAM PROGRESS</span><h2>{{ progress }}% completed</h2></div><span class="progress-badge">{{ approved }} of {{ total }}</span></div>
+    <div class="progress-track large-track"><span style="width: {{ progress }}%"></span></div>
+    <div class="progress-legend"><span><i class="legend-approved"></i>Approved {{ approved }}</span><span><i class="legend-submitted"></i>In review {{ submitted - approved if submitted >= approved else 0 }}</span><span><i class="legend-open"></i>Remaining {{ total - submitted if total >= submitted else 0 }}</span></div>
+  </article>
+
+  <article class="panel next-panel">
+    <span class="panel-kicker">NEXT ACTION</span>
+    {% if ns.next_item %}
+      <div class="next-row"><span class="week-chip">W{{ ns.next_item.week_number }}</span><div><h3>{{ ns.next_item.title }}</h3><p>{{ ns.next_item.week_title }}</p></div></div>
+      <a class="button secondary full" href="{{ url_for('student_assignment', assignment_id=ns.next_item.id) }}">Continue assignment</a>
+    {% else %}
+      <div class="empty-success"><span>✓</span><h3>Everything is approved.</h3><p>Excellent work. Review the curriculum or prepare for the next cohort milestone.</p></div>
+    {% endif %}
+  </article>
+</section>
+
+<section class="panel table-panel">
+  <div class="table-toolbar">
+    <div><span class="panel-kicker">MY WORK</span><h2>Assignments</h2></div>
+    <div class="table-controls">
+      <label class="search-control"><svg viewBox="0 0 24 24"><path d="m21 20-5.2-5.2a7 7 0 1 0-1.4 1.4L20 21l1-1ZM5 10.5a5.5 5.5 0 1 1 11 0 5.5 5.5 0 0 1-11 0Z"/></svg><input type="search" placeholder="Search assignments" data-table-search="student-assignments"></label>
+      <select class="compact-select" data-table-filter="student-assignments"><option value="">All types</option><option value="Hands-On">Hands-On</option><option value="Research">Research</option><option value="LinkedIn">LinkedIn</option></select>
+    </div>
+  </div>
+  <div class="responsive-table">
+    <table id="student-assignments">
+      <thead><tr><th>Week</th><th>Assignment</th><th>Type</th><th>Status</th><th>Score</th><th><span class="sr-only">Action</span></th></tr></thead>
+      <tbody>
+        {% for r in rows %}
+        <tr data-category="{{ r.category }}">
+          <td><span class="week-cell">{{ '%02d'|format(r.week_number) }}</span></td>
+          <td><strong class="table-title">{{ r.title }}</strong><span class="table-subtitle">{{ r.week_title }}</span></td>
+          <td><span class="pill {{ r.category|lower|replace(' ','-') }}">{{ r.category }}</span></td>
+          <td><span class="status {{ (r.submission_status or 'not-started')|lower|replace(' ','-') }}"><i></i>{{ r.submission_status or 'Not Started' }}</span></td>
+          <td>{% if r.score is not none %}<strong>{{ r.score }}</strong><span class="score-max"> / {{ r.max_score }}</span>{% else %}<span class="muted">Not graded</span>{% endif %}</td>
+          <td><a class="table-action" href="{{ url_for('student_assignment', assignment_id=r.id) }}">Open <span>→</span></a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div class="table-empty-state" data-empty-for="student-assignments">No assignments match your search.</div>
+  </div>
+</section>
 {% endblock %}

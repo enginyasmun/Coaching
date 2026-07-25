@@ -1,24 +1,6 @@
 {% extends "base.html" %}
-{% block title %}Assignments{% endblock %}
+{% block title %}Assignments | Developer Academy{% endblock %}
 {% block content %}
-<div class="page-head">
-  <div><span class="eyebrow">Instructor catalog</span><h1>All assignments</h1><p>Three core assignments per week: hands-on, research, and LinkedIn.</p></div>
-</div>
-<div class="table-card">
-<table>
-<thead><tr><th>Week</th><th>Assignment</th><th>Type</th><th>Due</th><th>Max score</th><th>Submissions</th></tr></thead>
-<tbody>
-{% for r in rows %}
-<tr>
-  <td>W{{ r.week_number }}</td>
-  <td><strong>{{ r.title }}</strong><div class="muted">{{ r.week_title }}</div></td>
-  <td><span class="pill {{ r.category|lower|replace(' ','-') }}">{{ r.category }}</span></td>
-  <td>{{ r.due_date or '—' }}</td>
-  <td>{{ r.max_score }}</td>
-  <td>{{ r.submissions }}</td>
-</tr>
-{% endfor %}
-</tbody>
-</table>
-</div>
+<section class="dashboard-hero compact-hero"><div><span class="page-kicker">PROGRAM CATALOG</span><h1>All assignments</h1><p>Three core deliverables every week: hands-on implementation, independent research, and professional communication.</p></div><a class="button secondary" href="{{ url_for('curriculum') }}">View curriculum</a></section>
+<section class="panel table-panel"><div class="table-toolbar"><div><span class="panel-kicker">ASSIGNMENT CATALOG</span><h2>{{ rows|length }} assignments</h2></div><div class="table-controls"><label class="search-control"><svg viewBox="0 0 24 24"><path d="m21 20-5.2-5.2a7 7 0 1 0-1.4 1.4L20 21l1-1ZM5 10.5a5.5 5.5 0 1 1 11 0 5.5 5.5 0 0 1-11 0Z"/></svg><input type="search" placeholder="Search assignments" data-table-search="assignment-catalog"></label><select class="compact-select" data-table-filter="assignment-catalog"><option value="">All types</option><option value="Hands-On">Hands-On</option><option value="Research">Research</option><option value="LinkedIn">LinkedIn</option></select></div></div><div class="responsive-table"><table id="assignment-catalog"><thead><tr><th>Week</th><th>Assignment</th><th>Type</th><th>Due date</th><th>Score</th><th>Submissions</th></tr></thead><tbody>{% for r in rows %}<tr data-category="{{ r.category }}"><td><span class="week-cell">{{ '%02d'|format(r.week_number) }}</span></td><td><strong class="table-title">{{ r.title }}</strong><span class="table-subtitle">{{ r.week_title }}</span></td><td><span class="pill {{ r.category|lower|replace(' ','-') }}">{{ r.category }}</span></td><td>{{ r.due_date or '—' }}</td><td>{{ r.max_score }}</td><td><strong>{{ r.submissions }}</strong></td></tr>{% endfor %}</tbody></table><div class="table-empty-state" data-empty-for="assignment-catalog">No assignments match your search.</div></div></section>
 {% endblock %}

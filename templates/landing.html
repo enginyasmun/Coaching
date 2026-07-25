@@ -1,35 +1,99 @@
 {% extends "base.html" %}
 {% block title %}Salesforce Junior Developer Academy{% endblock %}
-{% block content %}
-<section class="hero">
-  <div>
-    <span class="eyebrow">20-week professional program</span>
-    <h1>Train junior Salesforce developers for modern engineering teams.</h1>
-    <p class="lead">A complete learning portal for curriculum, hands-on work, weekly research, LinkedIn publishing, code review, grading, feedback, Git, DevOps, MCP, AI-assisted development, and Agentforce.</p>
-    <div class="actions">
-      <a class="button" href="{{ url_for('login') }}">Open academy portal</a>
+{% block public_content %}
+<section class="landing-hero">
+  <div class="hero-copy">
+    <div class="hero-kicker"><span></span>20-week professional development program</div>
+    <h1>Develop Salesforce talent that can <em>build, explain, and deliver.</em></h1>
+    <p class="hero-lead">A structured academy combining platform fundamentals, production-quality engineering, weekly technical research, professional communication, AI-assisted development, MCP, and Agentforce.</p>
+    <div class="hero-actions">
+      <a class="button large" href="{{ url_for('login') }}">Enter the academy
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m13 5-1.4 1.4 4.6 4.6H4v2h12.2l-4.6 4.6L13 19l7-7-7-7Z"/></svg>
+      </a>
+      <a class="text-link" href="#program">Explore the program</a>
+    </div>
+    <div class="hero-proof">
+      <div><strong>60</strong><span>Core assignments</span></div>
+      <div><strong>20</strong><span>Research papers</span></div>
+      <div><strong>20+</strong><span>LinkedIn posts</span></div>
     </div>
   </div>
-  <div class="hero-panel">
-    <div class="metric"><strong>20</strong><span>Weeks</span></div>
-    <div class="metric"><strong>60</strong><span>Core assignments</span></div>
-    <div class="metric"><strong>20</strong><span>Research papers</span></div>
-    <div class="metric"><strong>20+</strong><span>LinkedIn posts</span></div>
+
+  <div class="hero-product" aria-label="Academy dashboard preview">
+    <div class="mock-window">
+      <div class="mock-toolbar"><span></span><span></span><span></span><small>Developer Academy</small></div>
+      <div class="mock-shell">
+        <div class="mock-sidebar">
+          <div class="mock-logo">SF</div>
+          <i class="active"></i><i></i><i></i><i></i><i></i>
+        </div>
+        <div class="mock-content">
+          <div class="mock-greeting"><small>STUDENT DASHBOARD</small><strong>Good morning, developer.</strong><span>Your progress this week</span></div>
+          <div class="mock-stats"><b><span>Completed</span>42</b><b><span>Approved</span>31</b><b><span>Average</span>92</b></div>
+          <div class="mock-progress"><span></span></div>
+          <div class="mock-list">
+            <div><i class="dot hands"></i><p><strong>Apex testing strategy</strong><span>Hands-on · Week 10</span></p><em>Approved</em></div>
+            <div><i class="dot research"></i><p><strong>MCP vs CLI research</strong><span>Research · Week 19</span></p><em class="review">Review</em></div>
+            <div><i class="dot linkedin"></i><p><strong>LinkedIn learning post</strong><span>LinkedIn · Week 19</span></p><em class="draft">Draft</em></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="floating-card floating-one"><span>✓</span><div><strong>Feedback received</strong><small>Clear technical explanation</small></div></div>
+    <div class="floating-card floating-two"><strong>92%</strong><small>Average score</small></div>
   </div>
 </section>
 
-<section class="grid three">
-  <article class="card">
-    <h3>For students</h3>
-    <p>Review weekly learning, submit homework, upload links and files, receive feedback, revise work, and track progress.</p>
-  </article>
-  <article class="card">
-    <h3>For instructors</h3>
-    <p>Create student accounts, review submissions, assign scores, request revisions, and monitor completion across the cohort.</p>
-  </article>
-  <article class="card">
-    <h3>Modern curriculum</h3>
-    <p>Platform fundamentals, Apex, LWC, Git, DevOps, testing, security, integrations, MCP servers, AI coding agents, and Agentforce.</p>
-  </article>
+<section class="topic-strip" aria-label="Program topics">
+  <span>Salesforce Platform</span><i></i><span>Apex</span><i></i><span>LWC</span><i></i><span>Security</span><i></i><span>Git & DevOps</span><i></i><span>MCP</span><i></i><span>Agentforce</span>
+</section>
+
+<section class="landing-section" id="program">
+  <div class="section-heading">
+    <span class="section-number">01</span>
+    <div><small>THE PROGRAM</small><h2>More than a curriculum. A professional operating system.</h2></div>
+    <p>Students learn technical skills, demonstrate them in projects, research beyond the lesson, and explain their knowledge publicly.</p>
+  </div>
+  <div class="feature-grid">
+    <article class="feature-card featured">
+      <div class="feature-icon">01</div>
+      <h3>Structured technical progression</h3>
+      <p>Twenty carefully sequenced weeks from platform fundamentals through Apex, LWC, integrations, DevOps, MCP, and Agentforce.</p>
+      <ul><li>Hands-on implementation</li><li>Security and testing</li><li>Production engineering habits</li></ul>
+    </article>
+    <article class="feature-card">
+      <div class="feature-icon">02</div>
+      <h3>Independent research every week</h3>
+      <p>Students learn to find reliable documentation, compare approaches, evaluate risks, and form defensible technical recommendations.</p>
+    </article>
+    <article class="feature-card">
+      <div class="feature-icon">03</div>
+      <h3>Professional visibility</h3>
+      <p>Weekly mentor-reviewed LinkedIn posts build technical communication skills and a credible public learning portfolio.</p>
+    </article>
+  </div>
+</section>
+
+<section class="experience-section" id="experience">
+  <div class="experience-card">
+    <div class="experience-copy">
+      <span class="section-number light">02</span>
+      <small>ONE CONNECTED EXPERIENCE</small>
+      <h2>Students submit. Mentors review. Progress stays visible.</h2>
+      <p>The portal gives every participant a focused workspace without losing the accountability required for serious professional development.</p>
+      <div class="check-grid"><span>Individual student logins</span><span>Assignment submissions</span><span>Grades and written feedback</span><span>Revision workflow</span><span>Progress tracking</span><span>Instructor controls</span></div>
+    </div>
+    <div class="experience-steps">
+      <div><b>1</b><p><strong>Learn</strong><span>Review the weekly curriculum and technical objectives.</span></p></div>
+      <div><b>2</b><p><strong>Build</strong><span>Complete hands-on projects with testing evidence.</span></p></div>
+      <div><b>3</b><p><strong>Research</strong><span>Investigate a deeper technical question using credible sources.</span></p></div>
+      <div><b>4</b><p><strong>Publish</strong><span>Explain the lesson professionally and receive community feedback.</span></p></div>
+    </div>
+  </div>
+</section>
+
+<section class="landing-cta">
+  <div><small>READY TO CONTINUE?</small><h2>Open your academy workspace.</h2></div>
+  <a class="button light-button large" href="{{ url_for('login') }}">Sign in to the portal</a>
 </section>
 {% endblock %}

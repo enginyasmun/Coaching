@@ -1,18 +1,34 @@
 {% extends "base.html" %}
-{% block title %}Sign in{% endblock %}
-{% block content %}
-<section class="auth-shell">
-  <form class="card auth-card" method="post">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-    <span class="eyebrow">Academy access</span>
-    <h1>Sign in</h1>
-    <label>Email
-      <input type="email" name="email" required autocomplete="email">
-    </label>
-    <label>Password
-      <input type="password" name="password" required autocomplete="current-password">
-    </label>
-    <button class="button full" type="submit">Sign in</button>
-  </form>
+{% block title %}Sign in | Developer Academy{% endblock %}
+{% block public_content %}
+<section class="login-layout">
+  <div class="login-story">
+    <a class="login-back" href="{{ url_for('home') }}">← Back to academy</a>
+    <div class="login-story-copy">
+      <div class="hero-kicker light-kicker"><span></span>Salesforce Junior Developer Academy</div>
+      <h1>Learning becomes valuable when it becomes <em>visible work.</em></h1>
+      <p>Your dashboard brings curriculum, projects, research, feedback, grades, and professional development into one focused workspace.</p>
+      <div class="login-points">
+        <div><b>01</b><span><strong>Build every week</strong><small>Move from concepts to working Salesforce solutions.</small></span></div>
+        <div><b>02</b><span><strong>Receive direct feedback</strong><small>Improve through review, revision, and clear expectations.</small></span></div>
+        <div><b>03</b><span><strong>Create a professional portfolio</strong><small>Graduate with evidence of technical and communication skills.</small></span></div>
+      </div>
+    </div>
+  </div>
+  <div class="login-panel">
+    <form class="login-card" method="post">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <div class="login-mark">SF</div>
+      <div class="form-heading"><small>WELCOME BACK</small><h2>Sign in to your workspace</h2><p>Use the account provided by your instructor.</p></div>
+      <label class="field-label">Email address
+        <span class="input-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm8 7 8-5H4l8 5Zm0 2L4 8v10h16V8l-8 5Z"/></svg><input type="email" name="email" required autocomplete="email" placeholder="name@example.com"></span>
+      </label>
+      <label class="field-label">Password
+        <span class="input-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10V8a5 5 0 0 1 10 0v2h1a2 2 0 0 1 2 2v8H4v-8a2 2 0 0 1 2-2h1Zm2 0h6V8a3 3 0 0 0-6 0v2Zm2 4v3h2v-3h-2Z"/></svg><input type="password" name="password" required autocomplete="current-password" placeholder="Enter your password"></span>
+      </label>
+      <button class="button full large" type="submit">Sign in securely <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m13 5-1.4 1.4 4.6 4.6H4v2h12.2l-4.6 4.6L13 19l7-7-7-7Z"/></svg></button>
+      <p class="form-footnote">Account access is managed by the academy instructor.</p>
+    </form>
+  </div>
 </section>
 {% endblock %}

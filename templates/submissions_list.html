@@ -1,48 +1,10 @@
 {% extends "base.html" %}
-{% block title %}Submissions{% endblock %}
+{% block title %}Submissions | Developer Academy{% endblock %}
 {% block content %}
-<div class="page-head">
-  <div><span class="eyebrow">Instructor review</span><h1>Submissions and grading</h1></div>
-</div>
-<form class="filter-bar" method="get">
-  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-  <select name="status">
-    <option value="">All statuses</option>
-    {% for s in ['Draft','Submitted','Under Review','Revision Required','Approved','Late'] %}
-    <option value="{{ s }}" {% if selected_status == s %}selected{% endif %}>{{ s }}</option>
-    {% endfor %}
-  </select>
-  <select name="student_id">
-    <option value="">All students</option>
-    {% for s in students %}
-    <option value="{{ s.id }}" {% if selected_student|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
-    {% endfor %}
-  </select>
-  <select name="category">
-    <option value="">All categories</option>
-    {% for c in ['Hands-On','Research','LinkedIn'] %}
-    <option value="{{ c }}" {% if selected_category == c %}selected{% endif %}>{{ c }}</option>
-    {% endfor %}
-  </select>
-  <button class="button small" type="submit">Filter</button>
+<section class="dashboard-hero compact-hero"><div><span class="page-kicker">INSTRUCTOR REVIEW</span><h1>Submissions and grading</h1><p>Filter student work, open a submission, and provide clear scores and feedback.</p></div></section>
+<form class="panel filter-panel" method="get">
+  <div class="filter-heading"><span class="filter-icon"><svg viewBox="0 0 24 24"><path d="M3 5h18v2H3V5Zm3 6h12v2H6v-2Zm4 6h4v2h-4v-2Z"/></svg></span><div><strong>Filter submissions</strong><small>Narrow the review queue by status, student, or assignment type.</small></div></div>
+  <div class="filter-controls"><select name="status"><option value="">All statuses</option>{% for s in ['Draft','Submitted','Under Review','Revision Required','Approved','Late'] %}<option value="{{ s }}" {% if selected_status == s %}selected{% endif %}>{{ s }}</option>{% endfor %}</select><select name="student_id"><option value="">All students</option>{% for s in students %}<option value="{{ s.id }}" {% if selected_student|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>{% endfor %}</select><select name="category"><option value="">All categories</option>{% for c in ['Hands-On','Research','LinkedIn'] %}<option value="{{ c }}" {% if selected_category == c %}selected{% endif %}>{{ c }}</option>{% endfor %}</select><button class="button" type="submit">Apply filters</button></div>
 </form>
-<div class="table-card">
-<table>
-<thead><tr><th>Student</th><th>Week</th><th>Assignment</th><th>Status</th><th>Score</th><th></th></tr></thead>
-<tbody>
-{% for r in rows %}
-<tr>
-  <td><strong>{{ r.student_name }}</strong><div class="muted">{{ r.student_email }}</div></td>
-  <td>W{{ r.week_number }}</td>
-  <td>{{ r.assignment_title }}<div class="muted">{{ r.category }}</div></td>
-  <td><span class="status {{ r.status|lower|replace(' ','-') }}">{{ r.status }}</span></td>
-  <td>{% if r.score is not none %}{{ r.score }}/{{ r.max_score }}{% else %}—{% endif %}</td>
-  <td><a class="button small" href="{{ url_for('grade_submission', submission_id=r.id) }}">Review</a></td>
-</tr>
-{% else %}
-<tr><td colspan="6" class="empty">No submissions match these filters.</td></tr>
-{% endfor %}
-</tbody>
-</table>
-</div>
+<section class="panel table-panel"><div class="table-toolbar"><div><span class="panel-kicker">REVIEW QUEUE</span><h2>{{ rows|length }} submissions</h2></div></div><div class="responsive-table"><table><thead><tr><th>Student</th><th>Week</th><th>Assignment</th><th>Status</th><th>Score</th><th><span class="sr-only">Action</span></th></tr></thead><tbody>{% for r in rows %}<tr><td><div class="person-cell"><span class="mini-avatar">{{ r.student_name[:1]|upper }}</span><div><strong>{{ r.student_name }}</strong><span class="table-subtitle">{{ r.student_email }}</span></div></div></td><td><span class="week-cell">{{ '%02d'|format(r.week_number) }}</span></td><td><strong class="table-title">{{ r.assignment_title }}</strong><span class="table-subtitle">{{ r.category }}</span></td><td><span class="status {{ r.status|lower|replace(' ','-') }}"><i></i>{{ r.status }}</span></td><td>{% if r.score is not none %}<strong>{{ r.score }}</strong><span class="score-max"> / {{ r.max_score }}</span>{% else %}<span class="muted">Not graded</span>{% endif %}</td><td><a class="table-action" href="{{ url_for('grade_submission', submission_id=r.id) }}">Review <span>→</span></a></td></tr>{% else %}<tr><td colspan="6"><div class="empty-table"><span>○</span><strong>No submissions found</strong><p>Try changing the filters above.</p></div></td></tr>{% endfor %}</tbody></table></div></section>
 {% endblock %}

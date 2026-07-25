@@ -1,11 +1,3 @@
 {% extends "base.html" %}
-{% block title %}Error {{ code }}{% endblock %}
-{% block content %}
-<section class="auth-shell">
-  <div class="card auth-card center">
-    <span class="eyebrow">Error {{ code }}</span>
-    <h1>{{ message }}</h1>
-    <a class="button" href="{{ url_for('home') }}">Return home</a>
-  </div>
-</section>
-{% endblock %}
+{% block title %}Error {{ code }} | Developer Academy{% endblock %}
+{% if current_user %}{% block content %}<section class="error-page"><span class="error-code">{{ code }}</span><h1>{{ message }}</h1><p>The requested academy page could not be opened.</p><a class="button" href="{{ url_for('home') }}">Return to dashboard</a></section>{% endblock %}{% else %}{% block public_content %}<section class="error-page public-error"><span class="error-code">{{ code }}</span><h1>{{ message }}</h1><p>The requested academy page could not be opened.</p><a class="button" href="{{ url_for('home') }}">Return home</a></section>{% endblock %}{% endif %}
