@@ -2,45 +2,26 @@
 {% block title %}Instructor Dashboard | Developer Academy{% endblock %}
 {% block content %}
 <section class="dashboard-hero">
-  <div><span class="page-kicker">INSTRUCTOR DASHBOARD</span><h1>{{ scope_title }}</h1><p>{{ scope_note }}. Review work awaiting attention and keep every assigned student moving forward.</p></div>
-  <div class="hero-button-group">
-    {% if is_academy_admin %}<a class="button ghost" href="{{ url_for('manage_instructors') }}">Add instructor</a>{% endif %}
-    <a class="button" href="{{ url_for('manage_students') }}">Add student <svg viewBox="0 0 24 24"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6V5Z"/></svg></a>
-  </div>
+  <div><span class="page-kicker">INSTRUCTOR DASHBOARD</span><h1>{{ scope_title }}</h1><p>{{ scope_note }}. Each student follows one selected project across the entire sixteen-week program.</p></div>
+  <div class="hero-button-group">{% if is_academy_admin %}<a class="button ghost" href="{{ url_for('manage_instructors') }}">Add instructor</a>{% endif %}<a class="button" href="{{ url_for('manage_students') }}">Add student <svg viewBox="0 0 24 24"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6V5Z"/></svg></a></div>
 </section>
-
 <section class="stats-grid modern-stats">
-  <article class="stat-card accent-sage"><div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm6 2a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM2 21a7 7 0 0 1 14 0H2Zm13.5-6c3.6 0 6.5 2.2 6.5 5v1h-4.1a9 9 0 0 0-2.4-6Z"/></svg></div><div><span>{% if is_academy_admin %}Active students{% else %}My students{% endif %}</span><strong>{{ stats.students }}</strong><small>{% if is_academy_admin %}Across the academy{% else %}Assigned to you{% endif %}</small></div></article>
-  <article class="stat-card accent-charcoal"><div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm1 4v2h12V7H6Zm0 4v2h12v-2H6Zm0 4v2h8v-2H6Z"/></svg></div><div><span>Assignments</span><strong>{{ stats.assignments }}</strong><small>Including five final projects</small></div></article>
-  <article class="stat-card accent-amber"><div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-1 5v6l5 3 1-1.7-4-2.3V7h-2Z"/></svg></div><div><span>Awaiting review</span><strong>{{ stats.awaiting_review }}</strong><small>Only work you may review</small></div></article>
-  <article class="stat-card accent-coral"><div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M12 4V1L8 5l4 4V6a6 6 0 1 1-5.7 8H4.2A8 8 0 1 0 12 4Z"/></svg></div><div><span>Revisions</span><strong>{{ stats.revisions }}</strong><small>Returned for improvement</small></div></article>
+  <article class="stat-card accent-sage"><div class="stat-icon">👥</div><div><span>{% if is_academy_admin %}Active students{% else %}My students{% endif %}</span><strong>{{ stats.students }}</strong><small>{% if is_academy_admin %}Across the academy{% else %}Assigned to you{% endif %}</small></div></article>
+  <article class="stat-card accent-charcoal"><div class="stat-icon">▦</div><div><span>Assignments</span><strong>{{ stats.assignments }}</strong><small>48 per student</small></div></article>
+  <article class="stat-card accent-amber"><div class="stat-icon">◷</div><div><span>Awaiting review</span><strong>{{ stats.awaiting_review }}</strong><small>Only work you may review</small></div></article>
+  <article class="stat-card accent-coral"><div class="stat-icon">↻</div><div><span>Revisions</span><strong>{{ stats.revisions }}</strong><small>Returned for improvement</small></div></article>
 </section>
-
 <section class="quick-action-grid">
   <a class="quick-action sage-action" href="{{ url_for('submissions_list', status='Submitted') }}"><span class="quick-icon">✓</span><div><small>PRIMARY WORKFLOW</small><h3>Review submissions</h3><p>Open work submitted by students assigned to you.</p></div><span class="arrow-circle">→</span></a>
-  <a class="quick-action amber-action" href="{{ url_for('manage_students') }}"><span class="quick-icon">👥</span><div><small>MENTOR OWNERSHIP</small><h3>Manage students</h3><p>View your roster, classes, and instructor assignments.</p></div><span class="arrow-circle">→</span></a>
-  <a class="quick-action coral-action" href="{{ url_for('projects') }}"><span class="quick-icon">▦</span><div><small>PORTFOLIO ROADMAP</small><h3>Five industry apps</h3><p>See how weekly builds become complete final projects.</p></div><span class="arrow-circle">→</span></a>
+  <a class="quick-action amber-action" href="{{ url_for('manage_students') }}"><span class="quick-icon">👥</span><div><small>MENTOR OWNERSHIP</small><h3>Manage students</h3><p>View classes, instructor ownership, and project selection.</p></div><span class="arrow-circle">→</span></a>
+  <a class="quick-action coral-action" href="{{ url_for('projects') }}"><span class="quick-icon">▦</span><div><small>PROJECT OPTIONS</small><h3>Five 16-week plans</h3><p>Review every parallel industry-project roadmap.</p></div><span class="arrow-circle">→</span></a>
 </section>
-
 <section class="panel table-panel">
   <div class="table-toolbar"><div><span class="panel-kicker">RECENT ACTIVITY</span><h2>Student work</h2></div><a class="table-action" href="{{ url_for('submissions_list') }}">View all →</a></div>
-  <div class="responsive-table">
-    <table><thead><tr><th>Student</th><th>Assignment</th><th>Project</th><th>Type</th><th>Status</th><th></th></tr></thead>
-      <tbody>
-      {% for r in recent %}
-        <tr>
-          <td><strong class="table-title">{{ r.student_name }}</strong></td>
-          <td><strong class="table-title">{{ r.assignment_title }}</strong><span class="table-subtitle">Week {{ r.week_number }}</span></td>
-          <td><span class="table-subtitle">{{ r.project_title }}</span></td>
-          <td><span class="pill {{ r.category|lower|replace(' ','-') }}">{{ r.category }}</span></td>
-          <td><span class="status {{ r.status|lower|replace(' ','-') }}"><i></i>{{ r.status }}</span></td>
-          <td><a class="table-action" href="{{ url_for('grade_submission', submission_id=r.id) }}">Review →</a></td>
-        </tr>
-      {% else %}
-        <tr><td colspan="6"><div class="empty-table"><span>○</span><strong>No student activity yet</strong><p>Submitted homework will appear here.</p></div></td></tr>
-      {% endfor %}
-      </tbody>
-    </table>
-  </div>
+  <div class="responsive-table"><table><thead><tr><th>Student</th><th>Assignment</th><th>Project</th><th>Type</th><th>Status</th><th></th></tr></thead><tbody>
+  {% for r in recent %}
+  <tr><td><strong class="table-title">{{ r.student_name }}</strong><span class="table-subtitle">{{ r.student_email }}</span></td><td><strong class="table-title">{{ r.assignment_title }}</strong><span class="table-subtitle">Week {{ r.week_number }}</span></td><td><strong class="table-title">{{ r.industry or 'Not selected' }}</strong><span class="table-subtitle">{{ r.project_title or '' }}</span></td><td><span class="pill {{ r.category|lower|replace(' ','-') }}">{{ 'Final Project' if r.category == 'Capstone' else r.category }}</span></td><td><span class="status {{ r.status|lower|replace(' ','-') }}"><i></i>{{ r.status }}</span></td><td><a class="table-action" href="{{ url_for('grade_submission', submission_id=r.id) }}">Review →</a></td></tr>
+  {% else %}<tr><td colspan="6"><div class="empty-table"><span>○</span><strong>No student activity yet</strong><p>Submitted homework will appear here.</p></div></td></tr>{% endfor %}
+  </tbody></table></div>
 </section>
 {% endblock %}

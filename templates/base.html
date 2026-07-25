@@ -11,143 +11,59 @@
 <body class="{% if current_user %}app-body{% else %}public-body{% endif %}">
 {% if current_user %}
 <div class="app-layout">
-  <aside class="sidebar" id="app-sidebar" aria-label="Primary navigation">
+  <aside class="sidebar" id="app-sidebar">
     <div class="sidebar-top">
       <a class="app-brand" href="{{ url_for('home') }}">
-        <span class="brand-symbol" aria-hidden="true">SF</span>
-        <span class="brand-copy">
-          <strong>Developer Academy</strong>
-          <small>Salesforce learning portal</small>
-        </span>
+        <span class="brand-symbol">SF</span>
+        <span class="brand-copy"><strong>Developer Academy</strong><small>Salesforce learning portal</small></span>
       </a>
-
       <nav class="sidebar-nav">
         {% if current_user.role == 'student' %}
           <p class="nav-section-label">Learning</p>
-          <a class="nav-link {% if request.endpoint == 'student_dashboard' %}active{% endif %}" href="{{ url_for('student_dashboard') }}">
-            <svg viewBox="0 0 24 24"><path d="M4 13h6V4H4v9Zm0 7h6v-5H4v5Zm10 0h6v-9h-6v9Zm0-16v5h6V4h-6Z"/></svg>
-            <span>My dashboard</span>
-          </a>
-          <a class="nav-link {% if request.endpoint == 'projects' %}active{% endif %}" href="{{ url_for('projects') }}">
-            <svg viewBox="0 0 24 24"><path d="M4 4h7v7H4V4Zm9 0h7v7h-7V4ZM4 13h7v7H4v-7Zm9 0h7v7h-7v-7Z"/></svg>
-            <span>Industry projects</span>
-          </a>
-          <a class="nav-link {% if request.endpoint in ['curriculum','curriculum_week'] %}active{% endif %}" href="{{ url_for('curriculum') }}">
-            <svg viewBox="0 0 24 24"><path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm1 4v2h12V7H6Zm0 4v2h12v-2H6Zm0 4v2h8v-2H6Z"/></svg>
-            <span>Curriculum</span>
-          </a>
+          <a class="nav-link {% if request.endpoint == 'student_dashboard' %}active{% endif %}" href="{{ url_for('student_dashboard') }}"><svg viewBox="0 0 24 24"><path d="M4 13h6V4H4v9Zm0 7h6v-5H4v5Zm10 0h6v-9h-6v9Zm0-16v5h6V4h-6Z"/></svg><span>My dashboard</span></a>
+          <a class="nav-link {% if request.endpoint in ['projects','select_project'] %}active{% endif %}" href="{{ url_for('projects') }}"><svg viewBox="0 0 24 24"><path d="M4 4h7v7H4V4Zm9 0h7v7h-7V4ZM4 13h7v7H4v-7Zm9 0h7v7h-7v-7Z"/></svg><span>Project choices</span></a>
+          <a class="nav-link {% if request.endpoint in ['curriculum','curriculum_week'] %}active{% endif %}" href="{{ url_for('curriculum') }}"><svg viewBox="0 0 24 24"><path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm1 4v2h12V7H6Zm0 4v2h12v-2H6Zm0 4v2h8v-2H6Z"/></svg><span>My 16-week plan</span></a>
         {% else %}
           <p class="nav-section-label">Academy</p>
-          <a class="nav-link {% if request.endpoint == 'instructor_dashboard' %}active{% endif %}" href="{{ url_for('instructor_dashboard') }}">
-            <svg viewBox="0 0 24 24"><path d="M4 13h6V4H4v9Zm0 7h6v-5H4v5Zm10 0h6v-9h-6v9Zm0-16v5h6V4h-6Z"/></svg>
-            <span>Overview</span>
-          </a>
-          <a class="nav-link {% if request.endpoint in ['submissions_list','grade_submission'] %}active{% endif %}" href="{{ url_for('submissions_list') }}">
-            <svg viewBox="0 0 24 24"><path d="M7 3h10a2 2 0 0 1 2 2v16l-7-3-7 3V5a2 2 0 0 1 2-2Zm2 5v2h6V8H9Zm0 4v2h6v-2H9Z"/></svg>
-            <span>Submissions</span>
-          </a>
-          <a class="nav-link {% if request.endpoint in ['manage_students','update_student_class','assign_student_instructor'] %}active{% endif %}" href="{{ url_for('manage_students') }}">
-            <svg viewBox="0 0 24 24"><path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm6 2a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM2 21a7 7 0 0 1 14 0H2Zm13.5-6c3.6 0 6.5 2.2 6.5 5v1h-4.1a9 9 0 0 0-2.4-6Z"/></svg>
-            <span>Students</span>
-          </a>
+          <a class="nav-link {% if request.endpoint == 'instructor_dashboard' %}active{% endif %}" href="{{ url_for('instructor_dashboard') }}"><svg viewBox="0 0 24 24"><path d="M4 13h6V4H4v9Zm0 7h6v-5H4v5Zm10 0h6v-9h-6v9Zm0-16v5h6V4h-6Z"/></svg><span>Overview</span></a>
+          <a class="nav-link {% if request.endpoint in ['submissions_list','grade_submission'] %}active{% endif %}" href="{{ url_for('submissions_list') }}"><svg viewBox="0 0 24 24"><path d="M7 3h10a2 2 0 0 1 2 2v16l-7-3-7 3V5a2 2 0 0 1 2-2Zm2 5v2h6V8H9Zm0 4v2h6v-2H9Z"/></svg><span>Submissions</span></a>
+          <a class="nav-link {% if request.endpoint in ['manage_students','update_student_class','assign_student_instructor','assign_student_project'] %}active{% endif %}" href="{{ url_for('manage_students') }}"><svg viewBox="0 0 24 24"><path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm6 2a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM2 21a7 7 0 0 1 14 0H2Zm13.5-6c3.6 0 6.5 2.2 6.5 5v1h-4.1a9 9 0 0 0-2.4-6Z"/></svg><span>Students</span></a>
           {% if is_academy_admin %}
-          <a class="nav-link {% if request.endpoint in ['manage_instructors','toggle_instructor'] %}active{% endif %}" href="{{ url_for('manage_instructors') }}">
-            <svg viewBox="0 0 24 24"><path d="M12 2a5 5 0 1 0 0 10 5 5 0 0 0 0-10Zm-8 19a8 8 0 0 1 16 0H4Zm15-9h2v3h3v2h-3v3h-2v-3h-3v-2h3v-3Z"/></svg>
-            <span>Instructors</span>
-          </a>
+          <a class="nav-link {% if request.endpoint in ['manage_instructors','toggle_instructor'] %}active{% endif %}" href="{{ url_for('manage_instructors') }}"><svg viewBox="0 0 24 24"><path d="M12 2a5 5 0 1 0 0 10 5 5 0 0 0 0-10Zm-8 19a8 8 0 0 1 16 0H4Zm15-9h2v3h3v2h-3v3h-2v-3h-3v-2h3v-3Z"/></svg><span>Instructors</span></a>
           {% endif %}
-          <a class="nav-link {% if request.endpoint == 'projects' %}active{% endif %}" href="{{ url_for('projects') }}">
-            <svg viewBox="0 0 24 24"><path d="M4 4h7v7H4V4Zm9 0h7v7h-7V4ZM4 13h7v7H4v-7Zm9 0h7v7h-7v-7Z"/></svg>
-            <span>Industry projects</span>
-          </a>
-          <a class="nav-link {% if request.endpoint == 'manage_assignments' %}active{% endif %}" href="{{ url_for('manage_assignments') }}">
-            <svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm8 1.5V8h4.5L14 3.5ZM8 12v2h8v-2H8Zm0 4v2h8v-2H8Z"/></svg>
-            <span>Assignments</span>
-          </a>
-          <a class="nav-link {% if request.endpoint in ['curriculum','curriculum_week'] %}active{% endif %}" href="{{ url_for('curriculum') }}">
-            <svg viewBox="0 0 24 24"><path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm1 4v2h12V7H6Zm0 4v2h12v-2H6Zm0 4v2h8v-2H6Z"/></svg>
-            <span>Curriculum</span>
-          </a>
+          <a class="nav-link {% if request.endpoint == 'projects' %}active{% endif %}" href="{{ url_for('projects') }}"><svg viewBox="0 0 24 24"><path d="M4 4h7v7H4V4Zm9 0h7v7h-7V4ZM4 13h7v7H4v-7Zm9 0h7v7h-7v-7Z"/></svg><span>Project plans</span></a>
+          <a class="nav-link {% if request.endpoint == 'manage_assignments' %}active{% endif %}" href="{{ url_for('manage_assignments') }}"><svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm8 1.5V8h4.5L14 3.5ZM8 12v2h8v-2H8Zm0 4v2h8v-2H8Z"/></svg><span>Assignments</span></a>
+          <a class="nav-link {% if request.endpoint in ['curriculum','curriculum_week'] %}active{% endif %}" href="{{ url_for('curriculum') }}"><svg viewBox="0 0 24 24"><path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm1 4v2h12V7H6Zm0 4v2h12v-2H6Zm0 4v2h8v-2H6Z"/></svg><span>Curriculum</span></a>
         {% endif %}
       </nav>
     </div>
-
     <div class="sidebar-bottom">
-      <div class="profile-card">
-        <span class="avatar">{{ current_user.name[:1]|upper }}</span>
-        <span class="profile-copy">
-          <strong>{{ current_user.name }}</strong>
-          <small>
-            {% if current_user.role == 'student' %}Student
-            {% elif is_academy_admin %}Academy admin
-            {% else %}Instructor{% endif %}
-          </small>
-        </span>
-      </div>
-      <a class="nav-link signout-link" href="{{ url_for('logout') }}">
-        <svg viewBox="0 0 24 24"><path d="M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h5v-2H5V5h5V3Zm5.6 4.6L14.2 9l2 2H8v2h8.2l-2 2 1.4 1.4 4.4-4.4-4.4-4.4Z"/></svg>
-        <span>Sign out</span>
-      </a>
+      <div class="profile-card"><span class="avatar">{{ current_user.name[:1]|upper }}</span><span class="profile-copy"><strong>{{ current_user.name }}</strong><small>{% if current_user.role == 'student' %}Student{% elif is_academy_admin %}Academy admin{% else %}Instructor{% endif %}</small></span></div>
+      <a class="nav-link signout-link" href="{{ url_for('logout') }}"><svg viewBox="0 0 24 24"><path d="M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h5v-2H5V5h5V3Zm5.6 4.6L14.2 9l2 2H8v2h8.2l-2 2 1.4 1.4 4.4-4.4-4.4-4.4Z"/></svg><span>Sign out</span></a>
     </div>
   </aside>
-
   <div class="sidebar-overlay" data-sidebar-close></div>
   <section class="app-stage">
-    <header class="mobile-header">
-      <button class="icon-button" type="button" data-sidebar-toggle aria-label="Open navigation">
-        <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4V6Zm0 5h16v2H4v-2Zm0 5h16v2H4v-2Z"/></svg>
-      </button>
-      <a class="mobile-brand" href="{{ url_for('home') }}"><span class="brand-symbol">SF</span><strong>Academy</strong></a>
-      <span class="avatar small-avatar">{{ current_user.name[:1]|upper }}</span>
-    </header>
-
+    <header class="mobile-header"><button class="icon-button" type="button" data-sidebar-toggle><svg viewBox="0 0 24 24"><path d="M4 6h16v2H4V6Zm0 5h16v2H4v-2Zm0 5h16v2H4v-2Z"/></svg></button><a class="mobile-brand" href="{{ url_for('home') }}"><span class="brand-symbol">SF</span><strong>Academy</strong></a><span class="avatar small-avatar">{{ current_user.name[:1]|upper }}</span></header>
     <main class="app-content">
       {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-          <div class="flash-wrap">
-            {% for category, message in messages %}
-              <div class="flash {{ category }}"><span class="flash-dot"></span><span>{{ message }}</span></div>
-            {% endfor %}
-          </div>
-        {% endif %}
+        {% if messages %}<div class="flash-wrap">{% for category,message in messages %}<div class="flash {{ category }}"><span class="flash-dot"></span><span>{{ message }}</span></div>{% endfor %}</div>{% endif %}
       {% endwith %}
       {% block content %}{% endblock %}
     </main>
-
-    <footer class="app-footer">
-      <span>Salesforce Junior Developer Academy</span>
-      <span>Research · Build · Explain · Improve</span>
-    </footer>
+    <footer class="app-footer"><span>Salesforce Junior Developer Academy</span><span>Choose · Build · Research · Explain · Deliver</span></footer>
   </section>
 </div>
 {% else %}
 <header class="public-header">
-  <a class="app-brand dark-brand" href="{{ url_for('home') }}">
-    <span class="brand-symbol">SF</span>
-    <span class="brand-copy"><strong>Developer Academy</strong><small>Junior Salesforce program</small></span>
-  </a>
-  <nav class="public-nav">
-    <a href="{{ url_for('home') }}#program">Program</a>
-    <a href="{{ url_for('home') }}#experience">Experience</a>
-    <a class="button small" href="{{ url_for('login') }}">Sign in</a>
-  </nav>
+  <a class="app-brand dark-brand" href="{{ url_for('home') }}"><span class="brand-symbol">SF</span><span class="brand-copy"><strong>Developer Academy</strong><small>Junior Salesforce program</small></span></a>
+  <nav class="public-nav"><a href="{{ url_for('home') }}#program">Program</a><a href="{{ url_for('home') }}#experience">Experience</a><a class="button small" href="{{ url_for('login') }}">Sign in</a></nav>
 </header>
 <main class="public-main">
-  {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-      <div class="public-flashes flash-wrap">
-        {% for category, message in messages %}
-          <div class="flash {{ category }}"><span class="flash-dot"></span><span>{{ message }}</span></div>
-        {% endfor %}
-      </div>
-    {% endif %}
-  {% endwith %}
+  {% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}<div class="public-flashes flash-wrap">{% for category,message in messages %}<div class="flash {{ category }}"><span class="flash-dot"></span><span>{{ message }}</span></div>{% endfor %}</div>{% endif %}{% endwith %}
   {% block public_content %}{% block content_public %}{% endblock %}{% endblock %}
 </main>
-<footer class="public-footer">
-  <div><strong>Salesforce Junior Developer Academy</strong><p>Built for disciplined, modern Salesforce development training.</p></div>
-  <div>Research · Build · Explain · Improve</div>
-</footer>
+<footer class="public-footer"><div><strong>Salesforce Junior Developer Academy</strong><p>One chosen industry application, built over sixteen weeks.</p></div><div>Choose · Build · Research · Explain · Deliver</div></footer>
 {% endif %}
 <script src="{{ url_for('static', filename='app.js') }}" defer></script>
 </body>

@@ -3,104 +3,60 @@
 {% block content %}
 <section class="dashboard-hero compact-hero">
   <div>
-    <span class="page-kicker">CLASS & MENTOR MANAGEMENT</span>
+    <span class="page-kicker">CLASS, INSTRUCTOR, AND PROJECT MANAGEMENT</span>
     <h1>{% if page_is_admin %}Students{% else %}My students{% endif %}</h1>
-    <p>{% if page_is_admin %}Create accounts, organize classes, and assign every student to the instructor responsible for reviewing their work.{% else %}Only students assigned to you are shown. Their submissions and grades are private to you and academy administrators.{% endif %}</p>
+    <p>{% if page_is_admin %}Create accounts, assign instructors, and monitor each student's selected 16-week project.{% else %}Only students assigned to you appear here. Each student chooses one project and stays with it for all sixteen weeks.{% endif %}</p>
   </div>
-  {% if page_is_admin %}
-    <a class="button ghost" href="{{ url_for('manage_instructors') }}">Manage instructors</a>
-  {% endif %}
+  {% if page_is_admin %}<a class="button ghost" href="{{ url_for('manage_instructors') }}">Manage instructors</a>{% endif %}
 </section>
 
 <section class="management-grid">
   <form class="panel create-student-form" method="post">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-    <div class="form-heading-inline">
-      <div>
-        <span class="panel-kicker">NEW ACCOUNT</span>
-        <h2>Add a student</h2>
-        <p>Create credentials, select a class, and establish mentor ownership.</p>
-      </div>
-    </div>
+    <div class="form-heading-inline"><div><span class="panel-kicker">NEW ACCOUNT</span><h2>Add a student</h2><p>The student chooses a project after first login.</p></div></div>
     <label class="field-label">Full name<input type="text" name="name" required placeholder="Student name"></label>
     <label class="field-label">Email address<input type="email" name="email" required placeholder="student@example.com"></label>
     <label class="field-label">Temporary password<input type="text" name="password" required placeholder="Create a temporary password"><small class="field-help">Share this privately.</small></label>
     <label class="field-label">Class<input type="text" name="class_name" placeholder="Class 1"></label>
     {% if page_is_admin %}
-    <label class="field-label">Assigned instructor
-      <select name="assigned_instructor_id" required>
-        {% for instructor in instructors %}
-          <option value="{{ instructor.id }}" {% if instructor.id == current_user.id %}selected{% endif %}>{{ instructor.name }} · {{ instructor.email }}</option>
-        {% endfor %}
-      </select>
-      <small class="field-help">Only this instructor and academy administrators can view and grade the student's work.</small>
-    </label>
+    <label class="field-label">Assigned instructor<select name="assigned_instructor_id" required>{% for instructor in instructors %}<option value="{{ instructor.id }}" {% if instructor.id == current_user.id %}selected{% endif %}>{{ instructor.name }} · {{ instructor.email }}</option>{% endfor %}</select><small class="field-help">Only this instructor and academy administrators can review the student's work.</small></label>
     {% else %}
-      <div class="ownership-note"><span>✓</span><div><strong>Assigned to you</strong><p>The new student will automatically appear only in your instructor workspace.</p></div></div>
+    <div class="ownership-note"><span>✓</span><div><strong>Assigned to you</strong><p>The new student will automatically enter your private workspace.</p></div></div>
     {% endif %}
     <button class="button full" type="submit">Create student account</button>
   </form>
 
   <article class="panel access-panel">
-    <span class="access-icon">⌁</span>
-    <span class="panel-kicker">PRIVATE REVIEW MODEL</span>
-    <h2>One accountable instructor</h2>
-    <p>Each student has one assigned instructor. Regular instructors see only their students, submissions, files, grades, and feedback.</p>
-    <div class="access-list">
-      <span>✓ Scoped student roster</span>
-      <span>✓ Scoped homework queue</span>
-      <span>✓ Protected uploaded files</span>
-      <span>✓ Administrator oversight</span>
-    </div>
+    <span class="access-icon">⌁</span><span class="panel-kicker">PROJECT OWNERSHIP</span><h2>One student, one project</h2>
+    <p>Students choose one industry application and build it for sixteen weeks. The project becomes locked after the first new-program submission.</p>
+    <div class="access-list"><span>✓ One selected project</span><span>✓ Sixteen connected milestones</span><span>✓ Weekly research and LinkedIn</span><span>✓ One final production-style app</span></div>
   </article>
 </section>
 
 <section class="panel table-panel">
-  <div class="table-toolbar">
-    <div><span class="panel-kicker">STUDENT ROSTER</span><h2>{{ students|length }} students</h2></div>
-    <label class="search-control"><svg viewBox="0 0 24 24"><path d="m21 20-5.2-5.2a7 7 0 1 0-1.4 1.4L20 21l1-1ZM5 10.5a5.5 5.5 0 1 1 11 0 5.5 5.5 0 0 1-11 0Z"/></svg><input type="search" placeholder="Search students" data-table-search="student-roster"></label>
-  </div>
+  <div class="table-toolbar"><div><span class="panel-kicker">STUDENT ROSTER</span><h2>{{ students|length }} students</h2></div><label class="search-control"><svg viewBox="0 0 24 24"><path d="m21 20-5.2-5.2a7 7 0 1 0-1.4 1.4L20 21l1-1ZM5 10.5a5.5 5.5 0 1 1 11 0 5.5 5.5 0 0 1-11 0Z"/></svg><input type="search" placeholder="Search students" data-table-search="student-roster"></label></div>
   <div class="responsive-table">
     <table id="student-roster">
-      <thead><tr><th>Student</th><th>Class</th><th>Instructor</th><th>Submissions</th><th>Approved</th><th>Average</th><th>Status</th><th></th></tr></thead>
+      <thead><tr><th>Student</th><th>Class</th><th>Instructor</th><th>Selected project</th><th>Submissions</th><th>Average</th><th>Status</th><th></th></tr></thead>
       <tbody>
       {% for s in students %}
-        <tr>
-          <td><div class="person-cell"><span class="mini-avatar">{{ s.name[:1]|upper }}</span><div><strong>{{ s.name }}</strong><span class="table-subtitle">{{ s.email }}</span></div></div></td>
-          <td>
-            <form class="inline-class-form" method="post" action="{{ url_for('update_student_class', user_id=s.id) }}">
-              <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-              <input type="text" name="class_name" value="{{ s.cohort or '' }}" placeholder="Class name" aria-label="Class for {{ s.name }}">
-              <button class="table-action button-link" type="submit">Save</button>
-            </form>
-          </td>
-          <td>
-            {% if page_is_admin %}
-            <form class="inline-mentor-form" method="post" action="{{ url_for('assign_student_instructor', user_id=s.id) }}">
-              <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-              <select name="assigned_instructor_id" aria-label="Instructor for {{ s.name }}">
-                {% for instructor in instructors %}
-                  <option value="{{ instructor.id }}" {% if instructor.id == s.assigned_instructor_id %}selected{% endif %}>{{ instructor.name }}</option>
-                {% endfor %}
-              </select>
-              <button class="table-action button-link" type="submit">Assign</button>
-            </form>
-            {% else %}
-              <strong class="table-title">{{ s.instructor_name or current_user.name }}</strong>
-              <span class="table-subtitle">Assigned mentor</span>
-            {% endif %}
-          </td>
-          <td><strong>{{ s.submissions }}</strong></td>
-          <td><strong>{{ s.approved or 0 }}</strong></td>
-          <td><strong>{{ s.avg_score }}</strong></td>
-          <td><span class="status {{ 'approved' if s.is_active else 'late' }}"><i></i>{{ 'Active' if s.is_active else 'Inactive' }}</span></td>
-          <td>
-            <form class="inline-form" method="post" action="{{ url_for('toggle_student', user_id=s.id) }}">
-              <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-              <button class="table-action button-link" type="submit">{{ 'Deactivate' if s.is_active else 'Activate' }}</button>
-            </form>
-          </td>
-        </tr>
+      <tr>
+        <td><div class="person-cell"><span class="mini-avatar">{{ s.name[:1]|upper }}</span><div><strong>{{ s.name }}</strong><span class="table-subtitle">{{ s.email }}</span></div></div></td>
+        <td><form class="inline-class-form" method="post" action="{{ url_for('update_student_class', user_id=s.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input type="text" name="class_name" value="{{ s.cohort or '' }}" placeholder="Class name"><button class="table-action button-link" type="submit">Save</button></form></td>
+        <td>
+          {% if page_is_admin %}
+          <form class="inline-mentor-form" method="post" action="{{ url_for('assign_student_instructor', user_id=s.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><select name="assigned_instructor_id">{% for instructor in instructors %}<option value="{{ instructor.id }}" {% if instructor.id == s.assigned_instructor_id %}selected{% endif %}>{{ instructor.name }}</option>{% endfor %}</select><button class="table-action button-link" type="submit">Assign</button></form>
+          {% else %}<strong class="table-title">{{ s.instructor_name or current_user.name }}</strong><span class="table-subtitle">Assigned mentor</span>{% endif %}
+        </td>
+        <td>
+          {% if page_is_admin %}
+          <form class="inline-project-form" method="post" action="{{ url_for('assign_student_project', user_id=s.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><select name="selected_project_id"><option value="">Not selected</option>{% for p in projects %}<option value="{{ p.id }}" {% if p.id == s.selected_project_id %}selected{% endif %}>{{ p.industry }}</option>{% endfor %}</select><button class="table-action button-link" type="submit">Save</button></form>
+          {% else %}<strong class="table-title">{{ s.industry or 'Not selected' }}</strong><span class="table-subtitle">{{ s.project_title or 'Student must choose' }}</span>{% endif %}
+        </td>
+        <td><strong>{{ s.submissions }}</strong></td><td><strong>{{ s.avg_score }}</strong></td>
+        <td><span class="status {{ 'approved' if s.is_active else 'late' }}"><i></i>{{ 'Active' if s.is_active else 'Inactive' }}</span></td>
+        <td><form class="inline-form" method="post" action="{{ url_for('toggle_student', user_id=s.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><button class="table-action button-link" type="submit">{{ 'Deactivate' if s.is_active else 'Activate' }}</button></form></td>
+      </tr>
       {% endfor %}
       </tbody>
     </table>

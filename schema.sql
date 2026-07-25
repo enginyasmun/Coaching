@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS submissions;
 DROP TABLE IF EXISTS assignments;
+DROP TABLE IF EXISTS project_milestones;
 DROP TABLE IF EXISTS weeks;
 DROP TABLE IF EXISTS projects;
 DROP TABLE IF EXISTS users;
@@ -12,10 +13,12 @@ CREATE TABLE users (
     role TEXT NOT NULL CHECK(role IN ('student','instructor')),
     cohort TEXT,
     assigned_instructor_id INTEGER,
+    selected_project_id INTEGER,
     is_admin INTEGER NOT NULL DEFAULT 0,
     is_active INTEGER NOT NULL DEFAULT 1,
     created_at TEXT NOT NULL,
-    FOREIGN KEY (assigned_instructor_id) REFERENCES users(id)
+    FOREIGN KEY (assigned_instructor_id) REFERENCES users(id),
+    FOREIGN KEY (selected_project_id) REFERENCES projects(id)
 );
 
 CREATE TABLE projects (
@@ -24,28 +27,42 @@ CREATE TABLE projects (
     industry TEXT NOT NULL,
     title TEXT NOT NULL,
     summary TEXT NOT NULL,
-    final_deliverable TEXT NOT NULL,
-    week_start INTEGER NOT NULL,
-    week_end INTEGER NOT NULL,
+    entities TEXT NOT NULL,
+    personas TEXT NOT NULL,
+    process TEXT NOT NULL,
+    integration TEXT NOT NULL,
+    workspace TEXT NOT NULL,
+    agent TEXT NOT NULL,
     accent TEXT NOT NULL
 );
 
 CREATE TABLE weeks (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     week_number INTEGER NOT NULL UNIQUE,
-    project_id INTEGER NOT NULL,
     stage TEXT NOT NULL,
     title TEXT NOT NULL,
     topics TEXT NOT NULL,
-    hands_on TEXT NOT NULL,
     research_topic TEXT NOT NULL,
-    linkedin_topic TEXT NOT NULL,
-    FOREIGN KEY (project_id) REFERENCES projects(id)
+    linkedin_topic TEXT NOT NULL
+);
+
+CREATE TABLE project_milestones (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    project_id INTEGER NOT NULL,
+    week_number INTEGER NOT NULL,
+    title TEXT NOT NULL,
+    instructions TEXT NOT NULL,
+    deliverable TEXT NOT NULL,
+    is_final INTEGER NOT NULL DEFAULT 0,
+    UNIQUE(project_id, week_number),
+    FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
 );
 
 CREATE TABLE assignments (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     week_id INTEGER NOT NULL,
+    assignment_key TEXT UNIQUE,
+    program_version TEXT NOT NULL DEFAULT 'v5',
     title TEXT NOT NULL,
     category TEXT NOT NULL CHECK(category IN ('Hands-On','Research','LinkedIn','Reflection','Capstone')),
     instructions TEXT NOT NULL,
@@ -81,7 +98,8 @@ CREATE TABLE submissions (
 );
 
 CREATE INDEX idx_users_assigned_instructor ON users(assigned_instructor_id);
-CREATE INDEX idx_weeks_project ON weeks(project_id);
+CREATE INDEX idx_users_selected_project ON users(selected_project_id);
+CREATE INDEX idx_milestones_project_week ON project_milestones(project_id, week_number);
 CREATE INDEX idx_submissions_student ON submissions(student_id);
 CREATE INDEX idx_submissions_status ON submissions(status);
 CREATE INDEX idx_assignments_week ON assignments(week_id);

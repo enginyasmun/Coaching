@@ -5,7 +5,7 @@ import hashlib
 import secrets
 from pathlib import Path
 
-from curriculum_data import BASE_WEEKS, PROJECTS, PROJECT_MILESTONES, project_for_week
+from curriculum_data import PROGRAM_WEEKS, PROJECTS, PROJECT_MILESTONES
 
 BASE_DIR = Path(__file__).resolve().parent
 DB_PATH = Path(os.environ.get("DATABASE_PATH", BASE_DIR / "academy.db"))
@@ -46,8 +46,9 @@ with get_db() as conn:
     admin_id = conn.execute(
         """
         INSERT INTO users
-        (name,email,password_hash,role,cohort,assigned_instructor_id,is_admin,is_active,created_at)
-        VALUES (?,?,?,?,?,NULL,1,1,?)
+        (name,email,password_hash,role,cohort,assigned_instructor_id,
+         selected_project_id,is_admin,is_active,created_at)
+        VALUES (?,?,?,?,?,NULL,NULL,1,1,?)
         """,
         (
             os.environ.get("ADMIN_NAME", "Academy Instructor"),
@@ -59,125 +60,151 @@ with get_db() as conn:
         ),
     ).lastrowid
 
-    conn.execute(
-        """
-        INSERT INTO users
-        (name,email,password_hash,role,cohort,assigned_instructor_id,is_admin,is_active,created_at)
-        VALUES (?,?,?,?,?,?,0,1,?)
-        """,
-        (
-            os.environ.get("DEMO_STUDENT_NAME", "Demo Student"),
-            os.environ.get("DEMO_STUDENT_EMAIL", "student@example.com"),
-            generate_password_hash(os.environ.get("DEMO_STUDENT_PASSWORD", "Student123!")),
-            "student",
-            "Class 1",
-            admin_id,
-            now,
-        ),
-    )
-
     project_ids = {}
     for project in PROJECTS:
         project_ids[project["number"]] = conn.execute(
             """
             INSERT INTO projects
-            (project_number,industry,title,summary,final_deliverable,week_start,week_end,accent)
-            VALUES (?,?,?,?,?,?,?,?)
+            (project_number,industry,title,summary,entities,personas,process,
+             integration,workspace,agent,accent)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?)
             """,
             (
                 project["number"], project["industry"], project["title"],
-                project["summary"], project["final_deliverable"],
-                project["week_start"], project["week_end"], project["accent"],
+                project["summary"], project["entities"], project["personas"],
+                project["process"], project["integration"], project["workspace"],
+                project["agent"], project["accent"],
             ),
         ).lastrowid
 
+    demo_project_number = int(os.environ.get("DEMO_STUDENT_PROJECT", "1"))
+    demo_project_id = project_ids.get(demo_project_number, project_ids[1])
+    conn.execute(
+        """
+        INSERT INTO users
+        (name,email,password_hash,role,cohort,assigned_instructor_id,
+         selected_project_id,is_admin,is_active,created_at)
+        VALUES (?,?,?,?,?,?,?,0,1,?)
+        """,
+        (
+            os.environ.get("DEMO_STUDENT_NAME", "Demo Student"),
+            os.environ.get("DEMO_STUDENT_EMAIL", "student@example.com"),
+            generate_password_hash(
+                os.environ.get("DEMO_STUDENT_PASSWORD", "Student123!")
+            ),
+            "student",
+            "Class 1",
+            admin_id,
+            demo_project_id,
+            now,
+        ),
+    )
+
+    for project in PROJECTS:
+        project_id = project_ids[project["number"]]
+        for milestone in PROJECT_MILESTONES[project["number"]]:
+            conn.execute(
+                """
+                INSERT INTO project_milestones
+                (project_id,week_number,title,instructions,deliverable,is_final)
+                VALUES (?,?,?,?,?,?)
+                """,
+                (
+                    project_id, milestone["week_number"], milestone["title"],
+                    milestone["instructions"], milestone["deliverable"],
+                    milestone["is_final"],
+                ),
+            )
+
     start = date.today()
-    for item in BASE_WEEKS:
-        week_number, stage, title, topics, _old_hands_on, research_topic, linkedin_topic = item
-        project = project_for_week(week_number)
-        milestone = PROJECT_MILESTONES[week_number]
+    for item in PROGRAM_WEEKS:
+        week_number, stage, title, topics, research_topic, linkedin_topic = item
         week_id = conn.execute(
             """
             INSERT INTO weeks
-            (week_number,project_id,stage,title,topics,hands_on,research_topic,linkedin_topic)
-            VALUES (?,?,?,?,?,?,?,?)
+            (week_number,stage,title,topics,research_topic,linkedin_topic)
+            VALUES (?,?,?,?,?,?)
             """,
-            (
-                week_number, project_ids[project["number"]], stage, title, topics,
-                milestone["instructions"], research_topic, linkedin_topic,
-            ),
+            item,
         ).lastrowid
         due = (start + timedelta(days=week_number * 7)).isoformat()
 
-        conn.execute(
-            """
-            INSERT INTO assignments
-            (week_id,title,category,instructions,deliverable,max_score,due_date,is_published)
-            VALUES (?,?,?,?,?,?,?,1)
-            """,
-            (
-                week_id,
-                f"Week {week_number} Project Build: {milestone['title']}",
-                "Hands-On",
-                milestone["instructions"],
-                milestone["deliverable"],
-                100,
-                due,
-            ),
-        )
-        conn.execute(
-            """
-            INSERT INTO assignments
-            (week_id,title,category,instructions,deliverable,max_score,due_date,is_published)
-            VALUES (?,?,?,?,?,?,?,1)
-            """,
-            (
-                week_id,
-                f"Week {week_number} Research: {research_topic}",
-                "Research",
-                research_topic,
-                "500 to 1,000 words, at least three credible sources including one official Salesforce source, one practical example, and a personal conclusion.",
-                100,
-                due,
-            ),
-        )
-        conn.execute(
-            """
-            INSERT INTO assignments
-            (week_id,title,category,instructions,deliverable,max_score,due_date,is_published)
-            VALUES (?,?,?,?,?,?,?,1)
-            """,
-            (
-                week_id,
-                f"Week {week_number} LinkedIn: {linkedin_topic}",
-                "LinkedIn",
-                linkedin_topic,
-                "Submit a mentor-reviewed draft first. After approval, publish it and add the LinkedIn post URL.",
-                100,
-                due,
-            ),
-        )
-
-        if week_number == project["week_end"]:
-            conn.execute(
-                """
-                INSERT INTO assignments
-                (week_id,title,category,instructions,deliverable,max_score,due_date,is_published)
-                VALUES (?,?,?,?,?,?,?,1)
-                """,
-                (
-                    week_id,
-                    f"Final Project {project['number']}: {project['title']}",
-                    "Capstone",
-                    f"Consolidate the four weekly project-build milestones into one complete {project['industry']} application. Demonstrate the business process, architecture, security, automation or code, testing, and deployment readiness.",
-                    project["final_deliverable"],
-                    150,
-                    due,
-                ),
+        if week_number < 16:
+            category = "Hands-On"
+            assignment_title = f"Week {week_number} Project Build"
+            assignment_key = f"v5:w{week_number:02d}:build"
+            max_score = 100
+            instructions = (
+                "Complete the Week "
+                f"{week_number} milestone for your selected industry application."
             )
+            deliverable = (
+                "The required deliverable is defined by the project plan selected "
+                "for your student account."
+            )
+        else:
+            category = "Capstone"
+            assignment_title = "Week 16 Final Industry Application"
+            assignment_key = "v5:w16:capstone"
+            max_score = 150
+            instructions = (
+                "Complete, deploy, document, and demonstrate the full application "
+                "for your selected industry project."
+            )
+            deliverable = (
+                "A production-style Salesforce application, source repository, "
+                "architecture documentation, tests, release evidence, agent "
+                "guardrails, and final stakeholder demonstration."
+            )
+
+        conn.execute(
+            """
+            INSERT INTO assignments
+            (week_id,assignment_key,program_version,title,category,instructions,
+             deliverable,max_score,due_date,is_published)
+            VALUES (?,?, 'v5',?,?,?,?,?,?,1)
+            """,
+            (
+                week_id, assignment_key, assignment_title, category,
+                instructions, deliverable, max_score, due,
+            ),
+        )
+        conn.execute(
+            """
+            INSERT INTO assignments
+            (week_id,assignment_key,program_version,title,category,instructions,
+             deliverable,max_score,due_date,is_published)
+            VALUES (?,?, 'v5',?,?,?,?,100,?,1)
+            """,
+            (
+                week_id, f"v5:w{week_number:02d}:research",
+                f"Week {week_number} Research: {research_topic}", "Research",
+                research_topic,
+                "500 to 1,000 words, at least three credible sources including "
+                "one official Salesforce source, one practical example, and a "
+                "personal conclusion.",
+                due,
+            ),
+        )
+        conn.execute(
+            """
+            INSERT INTO assignments
+            (week_id,assignment_key,program_version,title,category,instructions,
+             deliverable,max_score,due_date,is_published)
+            VALUES (?,?, 'v5',?,?,?,?,100,?,1)
+            """,
+            (
+                week_id, f"v5:w{week_number:02d}:linkedin",
+                f"Week {week_number} LinkedIn: {linkedin_topic}", "LinkedIn",
+                linkedin_topic,
+                "Submit a mentor-reviewed draft first. After approval, publish it "
+                "and add the LinkedIn post URL.",
+                due,
+            ),
+        )
 
     conn.commit()
 
 print(f"Database initialized at {DB_PATH}")
 print(f"Instructor email: {admin_email}")
-print("The instructor password is the ADMIN_PASSWORD value used during initialization.")
+print("Program: 16 weeks, 5 project choices, 48 assignments per student.")

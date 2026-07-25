@@ -1,34 +1,23 @@
 {% extends "base.html" %}
 {% block title %}Week {{ week.week_number }} | Developer Academy{% endblock %}
 {% block content %}
-<a class="breadcrumb" href="{{ url_for('curriculum') }}">← Curriculum</a>
-<section class="week-hero stage-{{ week.stage|lower|replace(' ','-') }}">
-  <span class="week-hero-number">{{ '%02d'|format(week.week_number) }}</span>
-  <div><span class="page-kicker">{{ week.stage }}</span><h1>{{ week.title }}</h1><p>{{ week.topics }}</p></div>
-</section>
-
-<section class="project-context-card project-{{ week.accent }}">
-  <div><span>PROJECT {{ '%02d'|format(week.project_number) }} · {{ week.industry|upper }}</span><h2>{{ week.project_title }}</h2><p>{{ week.project_summary }}</p></div>
-  <a class="button secondary" href="{{ url_for('projects') }}">View all projects</a>
-</section>
-
+<a class="breadcrumb" href="{{ url_for('curriculum', project=week.project_id) }}">← 16-week plan</a>
+<section class="week-hero stage-{{ week.stage|lower|replace(' ','-') }}"><span class="week-hero-number">{{ '%02d'|format(week.week_number) }}</span><div><span class="page-kicker">{{ week.stage }}</span><h1>{{ week.milestone_title }}</h1><p>{{ week.milestone_instructions }}</p></div></section>
+<section class="project-context-card project-{{ week.accent }}"><div><span>{{ week.industry|upper }} · WEEK {{ week.week_number }} OF 16</span><h2>{{ week.project_title }}</h2><p>{{ week.project_summary }}</p></div><a class="button secondary" href="{{ url_for('projects') }}">View project choices</a></section>
 <section class="week-info-grid">
-  <article class="panel info-panel"><span class="panel-icon">▦</span><div><span class="panel-kicker">PROJECT MILESTONE</span><h2>Build one part of the application</h2><p>The hands-on assignment is not isolated practice. It becomes part of the final industry application.</p></div></article>
-  <article class="panel info-panel"><span class="panel-icon amber-icon">✓</span><div><span class="panel-kicker">WEEKLY OUTCOMES</span><h2>What you will deliver</h2><ul class="check-list"><li>Technical learning notes</li><li>Project-build milestone</li><li>Research homework</li><li>LinkedIn post</li>{% if assignments|selectattr('category','equalto','Capstone')|list %}<li>Final application demonstration</li>{% endif %}</ul></div></article>
+  <article class="panel info-panel"><span class="panel-icon">▦</span><div><span class="panel-kicker">REQUIRED PROJECT OUTPUT</span><h2>Milestone deliverable</h2><p>{{ week.milestone_deliverable }}</p></div></article>
+  <article class="panel info-panel"><span class="panel-icon amber-icon">✓</span><div><span class="panel-kicker">WEEKLY RHYTHM</span><h2>Three connected deliverables</h2><ul class="check-list"><li>Project build or final application</li><li>Independent technical research</li><li>Professional LinkedIn post</li></ul></div></article>
 </section>
-
-<div class="section-row"><div><span class="panel-kicker">WEEK {{ week.week_number }}</span><h2>Assignments</h2></div><span class="assignment-count">{{ assignments|length }} deliverables</span></div>
-<section class="assignment-grid {% if assignments|length == 4 %}four-assignment-grid{% endif %}">
+<div class="section-row"><div><span class="panel-kicker">WEEK {{ week.week_number }}</span><h2>Assignments</h2></div><span class="assignment-count">3 deliverables</span></div>
+<section class="assignment-grid">
 {% for a in assignments %}
-  <article class="assignment-card-modern {{ a.category|lower|replace(' ','-') }}">
-    <div class="assignment-card-head">
-      <span class="assignment-icon">{% if a.category == 'Hands-On' %}&lt;/&gt;{% elif a.category == 'Research' %}R{% elif a.category == 'LinkedIn' %}in{% else %}★{% endif %}</span>
-      <span class="pill {{ a.category|lower|replace(' ','-') }}">{{ a.category }}</span>
-    </div>
-    <h3>{{ a.title }}</h3><p>{{ a.instructions }}</p>
-    <div class="deliverable-modern"><small>REQUIRED DELIVERABLE</small><span>{{ a.deliverable }}</span></div>
-    {% if current_user.role == 'student' %}<a class="button secondary full" href="{{ url_for('student_assignment', assignment_id=a.id) }}">Open assignment</a>{% endif %}
-  </article>
+<article class="assignment-card-modern {{ a.category|lower|replace(' ','-') }}">
+  <div class="assignment-card-head"><span class="assignment-icon">{% if a.category == 'Hands-On' %}&lt;/&gt;{% elif a.category == 'Research' %}R{% elif a.category == 'LinkedIn' %}in{% else %}★{% endif %}</span><span class="pill {{ a.category|lower|replace(' ','-') }}">{{ 'Final Project' if a.category == 'Capstone' else a.category }}</span></div>
+  <h3>{% if a.category in ['Hands-On','Capstone'] %}{{ week.milestone_title }}{% else %}{{ a.title }}{% endif %}</h3>
+  <p>{% if a.category in ['Hands-On','Capstone'] %}{{ week.milestone_instructions }}{% else %}{{ a.instructions }}{% endif %}</p>
+  <div class="deliverable-modern"><small>REQUIRED DELIVERABLE</small><span>{% if a.category in ['Hands-On','Capstone'] %}{{ week.milestone_deliverable }}{% else %}{{ a.deliverable }}{% endif %}</span></div>
+  {% if current_user.role == 'student' %}<a class="button secondary full" href="{{ url_for('student_assignment', assignment_id=a.id) }}">Open assignment</a>{% endif %}
+</article>
 {% endfor %}
 </section>
 {% endblock %}

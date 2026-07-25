@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Choose Your Project | Developer Academy{% endblock %}
+{% block content %}
+<section class="selection-hero">
+  <div><span class="page-kicker">YOUR 16-WEEK SPECIALIZATION</span><h1>Choose one application to build from start to finish.</h1><p>The technical curriculum is shared, but every project milestone, data model, automation, Apex service, LWC, integration, agent, and final demonstration will use the industry you select.</p></div>
+  {% if project_locked %}<span class="locked-choice">Project locked after first submission</span>{% endif %}
+</section>
+<section class="selection-grid">
+{% for p in projects %}
+  <article class="selection-card project-{{ p.accent }} {% if selected_project and selected_project.id == p.id %}selected{% endif %}">
+    <div class="selection-card-top"><span>PROJECT {{ '%02d'|format(p.project_number) }}</span><strong>{{ p.industry }}</strong></div>
+    <h2>{{ p.title }}</h2><p>{{ p.summary }}</p>
+    <div class="selection-facts"><div><span>16</span><small>weekly milestones</small></div><div><span>1</span><small>complete application</small></div><div><span>48</span><small>total deliverables</small></div></div>
+    <div class="selection-detail"><strong>Core process</strong><p>{{ p.process }}</p></div>
+    {% if selected_project and selected_project.id == p.id %}
+      <span class="selected-project-badge">✓ Your selected project</span>
+    {% endif %}
+    <form method="post" action="{{ url_for('select_project') }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <input type="hidden" name="project_id" value="{{ p.id }}">
+      <button class="button full {% if selected_project and selected_project.id == p.id %}secondary{% endif %}" type="submit" {% if project_locked and selected_project and selected_project.id != p.id %}disabled{% endif %}>
+        {% if selected_project and selected_project.id == p.id %}Keep this project{% else %}Choose this project{% endif %}
+      </button>
+    </form>
+  </article>
+{% endfor %}
+</section>
+{% endblock %}
