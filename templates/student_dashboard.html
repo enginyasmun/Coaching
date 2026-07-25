@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}My Work{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <span class="eyebrow">Student dashboard</span>
+    <h1>Welcome, {{ current_user.name }}</h1>
+    <p>Track every assignment, submit your work, review feedback, and complete revisions.</p>
+  </div>
+</div>
+<div class="stats-grid">
+  <div class="stat-card"><span>Total assignments</span><strong>{{ summary.total }}</strong></div>
+  <div class="stat-card"><span>Submitted</span><strong>{{ summary.submitted or 0 }}</strong></div>
+  <div class="stat-card"><span>Approved</span><strong>{{ summary.approved or 0 }}</strong></div>
+  <div class="stat-card"><span>Average score</span><strong>{{ summary.avg_score }}</strong></div>
+</div>
+<div class="table-card">
+<table>
+  <thead>
+    <tr><th>Week</th><th>Assignment</th><th>Type</th><th>Status</th><th>Score</th><th></th></tr>
+  </thead>
+  <tbody>
+    {% for r in rows %}
+    <tr>
+      <td>W{{ r.week_number }}</td>
+      <td><strong>{{ r.title }}</strong><div class="muted">{{ r.week_title }}</div></td>
+      <td><span class="pill {{ r.category|lower|replace(' ','-') }}">{{ r.category }}</span></td>
+      <td><span class="status {{ (r.submission_status or 'not-started')|lower|replace(' ','-') }}">{{ r.submission_status or 'Not Started' }}</span></td>
+      <td>{% if r.score is not none %}{{ r.score }}/{{ r.max_score }}{% else %}—{% endif %}</td>
+      <td><a class="button small" href="{{ url_for('student_assignment', assignment_id=r.id) }}">Open</a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}

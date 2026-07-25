@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Salesforce Junior Developer Academy{% endblock %}
+{% block content %}
+<section class="hero">
+  <div>
+    <span class="eyebrow">20-week professional program</span>
+    <h1>Train junior Salesforce developers for modern engineering teams.</h1>
+    <p class="lead">A complete learning portal for curriculum, hands-on work, weekly research, LinkedIn publishing, code review, grading, feedback, Git, DevOps, MCP, AI-assisted development, and Agentforce.</p>
+    <div class="actions">
+      <a class="button" href="{{ url_for('login') }}">Open academy portal</a>
+    </div>
+  </div>
+  <div class="hero-panel">
+    <div class="metric"><strong>20</strong><span>Weeks</span></div>
+    <div class="metric"><strong>60</strong><span>Core assignments</span></div>
+    <div class="metric"><strong>20</strong><span>Research papers</span></div>
+    <div class="metric"><strong>20+</strong><span>LinkedIn posts</span></div>
+  </div>
+</section>
+
+<section class="grid three">
+  <article class="card">
+    <h3>For students</h3>
+    <p>Review weekly learning, submit homework, upload links and files, receive feedback, revise work, and track progress.</p>
+  </article>
+  <article class="card">
+    <h3>For instructors</h3>
+    <p>Create student accounts, review submissions, assign scores, request revisions, and monitor completion across the cohort.</p>
+  </article>
+  <article class="card">
+    <h3>Modern curriculum</h3>
+    <p>Platform fundamentals, Apex, LWC, Git, DevOps, testing, security, integrations, MCP servers, AI coding agents, and Agentforce.</p>
+  </article>
+</section>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Curriculum{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <span class="eyebrow">Complete program</span>
+    <h1>20-week curriculum</h1>
+    <p>Every week combines technical learning, hands-on implementation, independent research, and a professional LinkedIn post.</p>
+  </div>
+</div>
+<div class="week-grid">
+  {% for week in weeks %}
+  <a class="week-card" href="{{ url_for('curriculum_week', week_number=week.week_number) }}">
+    <span class="week-num">Week {{ week.week_number }}</span>
+    <span class="stage">{{ week.stage }}</span>
+    <h3>{{ week.title }}</h3>
+    <p>{{ week.topics[:170] }}{% if week.topics|length > 170 %}...{% endif %}</p>
+  </a>
+  {% endfor %}
+</div>
+{% endblock %}

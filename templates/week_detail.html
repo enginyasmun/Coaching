@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Week {{ week.week_number }}{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <span class="eyebrow">{{ week.stage }}</span>
+    <h1>Week {{ week.week_number }}: {{ week.title }}</h1>
+  </div>
+  <a class="button ghost" href="{{ url_for('curriculum') }}">Back to curriculum</a>
+</div>
+<div class="grid two">
+  <section class="card">
+    <h2>Topics</h2>
+    <p>{{ week.topics }}</p>
+  </section>
+  <section class="card">
+    <h2>Weekly outcomes</h2>
+    <ul>
+      <li>Complete technical learning notes</li>
+      <li>Finish the hands-on assignment</li>
+      <li>Submit the research homework</li>
+      <li>Publish at least one LinkedIn post after review</li>
+    </ul>
+  </section>
+</div>
+<h2 class="section-title">Assignments</h2>
+<div class="grid three">
+  {% for a in assignments %}
+  <article class="card assignment-card">
+    <span class="pill {{ a.category|lower|replace(' ','-') }}">{{ a.category }}</span>
+    <h3>{{ a.title }}</h3>
+    <p>{{ a.instructions }}</p>
+    <div class="deliverable"><strong>Deliverable:</strong> {{ a.deliverable }}</div>
+    {% if current_user.role == 'student' %}
+      <a class="button small" href="{{ url_for('student_assignment', assignment_id=a.id) }}">Open assignment</a>
+    {% endif %}
+  </article>
+  {% endfor %}
+</div>
+{% endblock %}

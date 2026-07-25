@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Submissions{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><span class="eyebrow">Instructor review</span><h1>Submissions and grading</h1></div>
+</div>
+<form class="filter-bar" method="get">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+  <select name="status">
+    <option value="">All statuses</option>
+    {% for s in ['Draft','Submitted','Under Review','Revision Required','Approved','Late'] %}
+    <option value="{{ s }}" {% if selected_status == s %}selected{% endif %}>{{ s }}</option>
+    {% endfor %}
+  </select>
+  <select name="student_id">
+    <option value="">All students</option>
+    {% for s in students %}
+    <option value="{{ s.id }}" {% if selected_student|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+    {% endfor %}
+  </select>
+  <select name="category">
+    <option value="">All categories</option>
+    {% for c in ['Hands-On','Research','LinkedIn'] %}
+    <option value="{{ c }}" {% if selected_category == c %}selected{% endif %}>{{ c }}</option>
+    {% endfor %}
+  </select>
+  <button class="button small" type="submit">Filter</button>
+</form>
+<div class="table-card">
+<table>
+<thead><tr><th>Student</th><th>Week</th><th>Assignment</th><th>Status</th><th>Score</th><th></th></tr></thead>
+<tbody>
+{% for r in rows %}
+<tr>
+  <td><strong>{{ r.student_name }}</strong><div class="muted">{{ r.student_email }}</div></td>
+  <td>W{{ r.week_number }}</td>
+  <td>{{ r.assignment_title }}<div class="muted">{{ r.category }}</div></td>
+  <td><span class="status {{ r.status|lower|replace(' ','-') }}">{{ r.status }}</span></td>
+  <td>{% if r.score is not none %}{{ r.score }}/{{ r.max_score }}{% else %}—{% endif %}</td>
+  <td><a class="button small" href="{{ url_for('grade_submission', submission_id=r.id) }}">Review</a></td>
+</tr>
+{% else %}
+<tr><td colspan="6" class="empty">No submissions match these filters.</td></tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+{% endblock %}

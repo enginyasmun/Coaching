@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Instructor Dashboard{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <span class="eyebrow">Instructor dashboard</span>
+    <h1>Academy overview</h1>
+    <p>Manage students, review work, request revisions, grade submissions, and monitor program progress.</p>
+  </div>
+</div>
+<div class="stats-grid">
+  <div class="stat-card"><span>Active students</span><strong>{{ stats.students }}</strong></div>
+  <div class="stat-card"><span>Assignments</span><strong>{{ stats.assignments }}</strong></div>
+  <div class="stat-card"><span>Awaiting review</span><strong>{{ stats.awaiting_review }}</strong></div>
+  <div class="stat-card"><span>Revisions</span><strong>{{ stats.revisions }}</strong></div>
+</div>
+<div class="quick-links grid three">
+  <a class="card action-card" href="{{ url_for('submissions_list', status='Submitted') }}"><h3>Review submissions</h3><p>Open student work waiting for grading.</p></a>
+  <a class="card action-card" href="{{ url_for('manage_students') }}"><h3>Manage students</h3><p>Create accounts and monitor progress.</p></a>
+  <a class="card action-card" href="{{ url_for('manage_assignments') }}"><h3>Review assignments</h3><p>See the complete 20-week assignment catalog.</p></a>
+</div>
+<h2 class="section-title">Recent activity</h2>
+<div class="table-card">
+<table>
+<thead><tr><th>Student</th><th>Assignment</th><th>Status</th><th>Submitted</th><th></th></tr></thead>
+<tbody>
+{% for r in recent %}
+<tr>
+  <td>{{ r.student_name }}</td>
+  <td><strong>W{{ r.week_number }} · {{ r.assignment_title }}</strong><div class="muted">{{ r.category }}</div></td>
+  <td><span class="status {{ r.status|lower|replace(' ','-') }}">{{ r.status }}</span></td>
+  <td>{{ r.submitted_at or r.updated_at }}</td>
+  <td><a class="button small" href="{{ url_for('grade_submission', submission_id=r.id) }}">Review</a></td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+{% endblock %}

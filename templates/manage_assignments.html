@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Assignments{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><span class="eyebrow">Instructor catalog</span><h1>All assignments</h1><p>Three core assignments per week: hands-on, research, and LinkedIn.</p></div>
+</div>
+<div class="table-card">
+<table>
+<thead><tr><th>Week</th><th>Assignment</th><th>Type</th><th>Due</th><th>Max score</th><th>Submissions</th></tr></thead>
+<tbody>
+{% for r in rows %}
+<tr>
+  <td>W{{ r.week_number }}</td>
+  <td><strong>{{ r.title }}</strong><div class="muted">{{ r.week_title }}</div></td>
+  <td><span class="pill {{ r.category|lower|replace(' ','-') }}">{{ r.category }}</span></td>
+  <td>{{ r.due_date or '—' }}</td>
+  <td>{{ r.max_score }}</td>
+  <td>{{ r.submissions }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+{% endblock %}

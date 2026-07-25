@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Grade Submission{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <span class="eyebrow">Week {{ row.week_number }} · {{ row.category }}</span>
+    <h1>{{ row.assignment_title }}</h1>
+    <p>{{ row.student_name }} · {{ row.student_email }}</p>
+  </div>
+  <a class="button ghost" href="{{ url_for('submissions_list') }}">Back to submissions</a>
+</div>
+<div class="grid two">
+<section class="card">
+  <h2>Student submission</h2>
+  <div class="meta-list">
+    <div><span>Status</span><strong>{{ row.status }}</strong></div>
+    <div><span>Submitted</span><strong>{{ row.submitted_at or 'Draft only' }}</strong></div>
+    <div><span>Revision</span><strong>{{ row.revision_number }}</strong></div>
+  </div>
+  {% if row.submission_text %}
+    <div class="submission-copy">{{ row.submission_text }}</div>
+  {% endif %}
+  <div class="link-list">
+    {% if row.submission_url %}<a href="{{ row.submission_url }}" target="_blank">Open submission link</a>{% endif %}
+    {% if row.linkedin_url %}<a href="{{ row.linkedin_url }}" target="_blank">Open LinkedIn post</a>{% endif %}
+    {% if row.file_name %}<a href="{{ url_for('uploaded_file', filename=row.file_name) }}">Download uploaded file</a>{% endif %}
+  </div>
+  {% if row.student_note %}<div class="note-box"><strong>Student note:</strong> {{ row.student_note }}</div>{% endif %}
+</section>
+<form class="card" method="post">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+  <h2>Grade and feedback</h2>
+  <label>Status
+    <select name="status">
+      {% for s in ['Under Review','Revision Required','Approved','Late'] %}
+      <option value="{{ s }}" {% if row.status == s %}selected{% endif %}>{{ s }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>Score out of {{ row.max_score }}
+    <input type="number" step="0.1" min="0" max="{{ row.max_score }}" name="score" value="{{ row.score if row.score is not none else '' }}">
+  </label>
+  <label>Mentor feedback
+    <textarea name="mentor_feedback" rows="12" placeholder="Explain strengths, corrections, required revisions, and next steps.">{{ row.mentor_feedback or '' }}</textarea>
+  </label>
+  <button class="button full" type="submit">Save grade and feedback</button>
+</form>
+</div>
+{% endblock %}

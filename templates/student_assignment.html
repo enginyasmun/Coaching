@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}{{ assignment.title }}{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <span class="eyebrow">Week {{ assignment.week_number }} · {{ assignment.category }}</span>
+    <h1>{{ assignment.title }}</h1>
+    <p>{{ assignment.instructions }}</p>
+  </div>
+  <a class="button ghost" href="{{ url_for('student_dashboard') }}">Back to my work</a>
+</div>
+
+<div class="grid two">
+<section class="card">
+  <h2>Required deliverable</h2>
+  <p>{{ assignment.deliverable }}</p>
+  <div class="meta-list">
+    <div><span>Maximum score</span><strong>{{ assignment.max_score }}</strong></div>
+    <div><span>Due date</span><strong>{{ assignment.due_date or 'To be assigned' }}</strong></div>
+    <div><span>Current status</span><strong>{{ submission.status if submission else 'Not Started' }}</strong></div>
+  </div>
+  {% if submission and submission.mentor_feedback %}
+  <div class="feedback-box">
+    <h3>Mentor feedback</h3>
+    <p>{{ submission.mentor_feedback }}</p>
+    {% if submission.score is not none %}<strong>Score: {{ submission.score }}/{{ assignment.max_score }}</strong>{% endif %}
+  </div>
+  {% endif %}
+</section>
+
+<form class="card" method="post" enctype="multipart/form-data">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+  <h2>Your submission</h2>
+  <label>Status
+    <select name="status">
+      {% for status in ['Draft','Submitted'] %}
+      <option value="{{ status }}" {% if submission and submission.status == status %}selected{% endif %}>{{ status }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>Written response
+    <textarea name="submission_text" rows="10" placeholder="Paste your research, reflection, technical explanation, or submission notes here.">{{ submission.submission_text if submission else '' }}</textarea>
+  </label>
+  <label>Submission or repository URL
+    <input type="url" name="submission_url" value="{{ submission.submission_url if submission else '' }}" placeholder="https://">
+  </label>
+  <label>LinkedIn post URL
+    <input type="url" name="linkedin_url" value="{{ submission.linkedin_url if submission else '' }}" placeholder="https://www.linkedin.com/posts/...">
+  </label>
+  <label>Upload supporting file
+    <input type="file" name="file">
+  </label>
+  {% if submission and submission.file_name %}
+    <a href="{{ url_for('uploaded_file', filename=submission.file_name) }}">Download current file</a>
+  {% endif %}
+  <label>Note to mentor
+    <textarea name="student_note" rows="4">{{ submission.student_note if submission else '' }}</textarea>
+  </label>
+  <button class="button full" type="submit">Save submission</button>
+</form>
+</div>
+{% endblock %}

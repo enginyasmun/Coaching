@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Salesforce Junior Developer Academy{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="{{ url_for('home') }}">
+    <span class="brand-mark">SF</span>
+    <span>Junior Developer Academy</span>
+  </a>
+  <nav>
+    {% if current_user %}
+      <a href="{{ url_for('curriculum') }}">Curriculum</a>
+      {% if current_user.role == 'student' %}
+        <a href="{{ url_for('student_dashboard') }}">My Work</a>
+      {% else %}
+        <a href="{{ url_for('instructor_dashboard') }}">Instructor</a>
+        <a href="{{ url_for('submissions_list') }}">Submissions</a>
+        <a href="{{ url_for('manage_students') }}">Students</a>
+      {% endif %}
+      <span class="user-chip">{{ current_user.name }}</span>
+      <a class="button small ghost" href="{{ url_for('logout') }}">Sign out</a>
+    {% else %}
+      <a class="button small" href="{{ url_for('login') }}">Sign in</a>
+    {% endif %}
+  </nav>
+</header>
+
+<main class="container">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-wrap">
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+  {% block content %}{% endblock %}
+</main>
+
+<footer>
+  <div>Salesforce Junior Developer Academy</div>
+  <div>Research. Build. Explain. Improve.</div>
+</footer>
+</body>
+</html>

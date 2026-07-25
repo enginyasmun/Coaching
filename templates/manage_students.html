@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Students{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><span class="eyebrow">Instructor administration</span><h1>Students</h1></div>
+</div>
+<div class="grid two">
+<form class="card" method="post">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+  <h2>Create student account</h2>
+  <label>Full name<input type="text" name="name" required></label>
+  <label>Email<input type="email" name="email" required></label>
+  <label>Temporary password<input type="text" name="password" required></label>
+  <label>Cohort<input type="text" name="cohort" placeholder="Cohort 1"></label>
+  <button class="button full" type="submit">Create account</button>
+</form>
+<section class="card">
+  <h2>Access model</h2>
+  <p>Students only see their own submissions and feedback. Instructors can review all students and all assignments.</p>
+  <p>For production, change the demo passwords and set a strong <code>SECRET_KEY</code>.</p>
+</section>
+</div>
+<h2 class="section-title">Student roster</h2>
+<div class="table-card">
+<table>
+<thead><tr><th>Student</th><th>Cohort</th><th>Submissions</th><th>Approved</th><th>Average</th><th>Status</th><th></th></tr></thead>
+<tbody>
+{% for s in students %}
+<tr>
+  <td><strong>{{ s.name }}</strong><div class="muted">{{ s.email }}</div></td>
+  <td>{{ s.cohort or '—' }}</td>
+  <td>{{ s.submissions }}</td>
+  <td>{{ s.approved or 0 }}</td>
+  <td>{{ s.avg_score }}</td>
+  <td>{{ 'Active' if s.is_active else 'Inactive' }}</td>
+  <td>
+    <form method="post" action="{{ url_for('toggle_student', user_id=s.id) }}">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <button class="button small ghost" type="submit">{{ 'Deactivate' if s.is_active else 'Activate' }}</button>
+    </form>
+  </td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+{% endblock %}
