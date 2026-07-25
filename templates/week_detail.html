@@ -3,16 +3,23 @@
 {% block content %}
 <a class="breadcrumb" href="{{ url_for('curriculum', project=week.project_id) }}">← 16-week plan</a>
 
-<section class="week-hero stage-{{ week.stage|lower|replace(' ','-') }}">
-  <span class="week-hero-number">{{ '%02d'|format(week.week_number) }}</span>
-  <div>
-    <span class="page-kicker">{{ week.stage }}</span>
+<section class="week-hero stage-{{ week.stage|lower|replace(' ','-') }} week-hero-v2">
+  <div class="week-hero-number-wrap">
+    <span class="week-hero-number">{{ '%02d'|format(week.week_number) }}</span>
+    <small>Week of 16</small>
+  </div>
+  <div class="week-hero-copy">
+    <div class="week-meta-row">
+      <span class="page-kicker">{{ week.stage }}</span>
+      <span class="hero-chip">{{ week.industry }}</span>
+      <span class="hero-chip soft">{{ week.project_title }}</span>
+    </div>
     <h1>{{ week.milestone_title }}</h1>
     <p>{{ week.milestone_instructions }}</p>
   </div>
 </section>
 
-<section class="project-context-card project-{{ week.accent }}">
+<section class="project-context-card project-{{ week.accent }} project-context-card-v2">
   <div>
     <span>{{ week.industry|upper }} · WEEK {{ week.week_number }} OF 16</span>
     <h2>{{ week.project_title }}</h2>
@@ -21,7 +28,16 @@
   <a class="button secondary" href="{{ url_for('projects') }}">View project choices</a>
 </section>
 
-<section class="guided-lab-shell" id="guided-lab" data-lab-id="{{ guided_lab.lab_id }}">
+</section>
+
+<section class="week-jump-nav">
+  <a href="#guided-lab">Build lab</a>
+  <a href="#research-lab">Research lab</a>
+  <a href="#linkedin-lab">LinkedIn lab</a>
+  <a href="#assignments">Submit work</a>
+</section>
+
+<section class="guided-lab-shell guided-lab-shell-v2" id="guided-lab" data-lab-id="{{ guided_lab.lab_id }}">
   <header class="guided-lab-header">
     <div>
       <span class="guided-label">STEP-BY-STEP HANDS-ON LAB</span>
@@ -136,7 +152,7 @@
   </section>
 </section>
 
-<section class="research-learning-lab" id="research-lab">
+<section class="research-learning-lab research-learning-lab-v2" id="research-lab">
   <header class="research-lab-header">
     <div>
       <span class="research-label">GUIDED RESEARCH LAB</span>
@@ -177,7 +193,7 @@
   </div>
 </section>
 
-<section class="linkedin-learning-lab" id="linkedin-lab">
+<section class="linkedin-learning-lab linkedin-learning-lab-v2" id="linkedin-lab">
   <header>
     <div class="linkedin-lab-icon">in</div>
     <div>
@@ -204,7 +220,7 @@
   <span class="assignment-count">3 deliverables</span>
 </div>
 
-<section class="assignment-grid">
+<section class="assignment-grid assignment-grid-v2">
 {% for a in assignments %}
   <article class="assignment-card-modern {{ a.category|lower|replace(' ','-') }}">
     <div class="assignment-card-head">

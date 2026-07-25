@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}16-Week Curriculum | Developer Academy{% endblock %}
 {% block content %}
-<section class="curriculum-hero">
+<section class="curriculum-hero curriculum-hero-v2">
   <div><span class="page-kicker">{{ selected_project.industry|upper }} PROJECT PLAN</span><h1>{{ selected_project.title }}</h1><p>{{ selected_project.summary }} Every week advances the same application toward a production-style final demonstration.</p></div>
   <div class="curriculum-summary"><div><strong>16</strong><span>Project weeks</span></div><div><strong>16</strong><span>Research papers</span></div><div><strong>16</strong><span>LinkedIn posts</span></div></div>
 </section>
@@ -10,7 +10,7 @@
 <form class="project-plan-selector" method="get"><label>View another project plan<select name="project" onchange="this.form.submit()">{% for p in projects %}<option value="{{ p.id }}" {% if p.id == selected_project.id %}selected{% endif %}>{{ p.industry }} · {{ p.title }}</option>{% endfor %}</select></label></form>
 {% endif %}
 
-<div class="week-grid modern-week-grid project-week-grid">
+<div class="week-grid modern-week-grid project-week-grid project-week-grid-v2">
 {% for week in weeks %}
 <a class="week-card stage-{{ week.stage|lower|replace(' ','-') }} {% if week.is_final %}final-week-card{% endif %}" href="{{ url_for('curriculum_week', week_number=week.week_number, project=selected_project.id) }}">
   <div class="week-card-top"><span class="week-number">{{ '%02d'|format(week.week_number) }}</span><span class="stage-pill">{{ week.stage }}</span></div>

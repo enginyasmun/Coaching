@@ -1292,3 +1292,231 @@
   text-decoration:underline;
   text-underline-offset:4px;
 }
+
+
+/* =========================================================
+   Version 7 design refresh: cleaner, more modern app pages
+   ========================================================= */
+:root{
+  --canvas:#f6f4ef;
+  --surface:#ffffff;
+  --surface-2:#fbfaf7;
+  --line:#e7e3da;
+  --line-strong:#d8d3c8;
+  --shadow-card:0 10px 30px rgba(19,29,24,.06),0 1px 2px rgba(19,29,24,.04);
+  --shadow-card-lg:0 24px 60px rgba(19,29,24,.10),0 1px 3px rgba(19,29,24,.05);
+}
+body.app-body{
+  background:
+    radial-gradient(circle at top right, rgba(213,154,52,.08), transparent 18%),
+    radial-gradient(circle at left 20%, rgba(40,91,75,.06), transparent 22%),
+    var(--canvas);
+}
+.app-content{width:min(1460px,100%);padding-top:38px}
+.sidebar{
+  background:linear-gradient(180deg,#16231d 0%,#1d2d25 42%,#18251f 100%);
+  border-right:1px solid rgba(255,255,255,.05);
+  box-shadow:18px 0 40px rgba(10,18,15,.14);
+}
+.nav-link{border:1px solid transparent}
+.nav-link:hover{border-color:rgba(255,255,255,.05)}
+.nav-link.active{
+  background:linear-gradient(180deg,#fffdf9 0%,#f2efe8 100%);
+  border-color:#ebe5d7;
+}
+.profile-card{
+  border-radius:16px;
+  background:rgba(255,255,255,.04);
+}
+.app-footer{
+  background:rgba(255,255,255,.55);
+  backdrop-filter:blur(14px);
+}
+.panel,.stat-card,.week-card,.assignment-card-modern,.guided-lab-shell,.research-learning-lab,.linkedin-learning-lab,.project-context-card,.week-hero{
+  box-shadow:var(--shadow-card);
+}
+
+/* Curriculum */
+.curriculum-hero-v2{
+  position:relative;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.08);
+  background:
+    radial-gradient(circle at 88% 18%, rgba(213,154,52,.18), transparent 18%),
+    radial-gradient(circle at 74% 72%, rgba(255,255,255,.05), transparent 24%),
+    linear-gradient(135deg,#15211c 0%,#1d3027 48%,#264537 100%);
+  box-shadow:var(--shadow-card-lg);
+}
+.curriculum-hero-v2:before{
+  content:"";position:absolute;right:-110px;top:-110px;width:320px;height:320px;border-radius:50%;border:1px solid rgba(255,255,255,.06);box-shadow:0 0 0 60px rgba(255,255,255,.02),0 0 0 120px rgba(255,255,255,.012);
+}
+.curriculum-hero-v2>*{position:relative;z-index:1}
+.curriculum-summary div{
+  background:rgba(255,255,255,.09);
+  backdrop-filter:blur(8px);
+}
+.project-week-grid-v2{gap:18px;margin-top:22px}
+.project-week-grid-v2 .week-card{
+  border:1px solid #ebe6da;
+  border-radius:24px;
+  padding:24px 24px 22px;
+  min-height:270px;
+  background:linear-gradient(180deg,#fff 0%,#fdfcf9 100%);
+}
+.project-week-grid-v2 .week-card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 18px 42px rgba(23,32,27,.09);
+}
+.project-week-grid-v2 .week-card:before{width:6px}
+.project-week-grid-v2 .week-card-top{margin-bottom:6px}
+.project-week-grid-v2 .stage-pill{background:#f6f4ee;border:1px solid #e5e1d7;color:#67716c}
+.project-week-grid-v2 .milestone-label{display:inline-flex;align-items:center;gap:7px;font-size:9px;font-weight:900;letter-spacing:.12em;color:#7d867f;margin-top:14px}
+.project-week-grid-v2 .milestone-label:before{content:"";width:18px;height:2px;background:var(--stage-color);border-radius:99px}
+.project-week-grid-v2 .week-card h3{font-size:21px;line-height:1.2;margin:18px 0 9px}
+.project-week-grid-v2 .week-card p{font-size:12px;line-height:1.72;color:#616b64}
+.project-week-grid-v2 .week-card-foot{font-size:10px}
+
+/* Week detail */
+.week-hero-v2{
+  grid-template-columns:132px 1fr;
+  border-radius:30px;
+  padding:34px 36px;
+  background:
+    radial-gradient(circle at 88% 16%, color-mix(in srgb,var(--stage-color) 14%, transparent), transparent 18%),
+    linear-gradient(180deg,#ffffff 0%,#fcfbf8 100%);
+}
+.week-hero-v2:after{display:none}
+.week-hero-number-wrap{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:10px}
+.week-hero-number-wrap small{
+  display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border-radius:999px;background:#f3f2ee;border:1px solid #e4e0d7;color:#67726d;font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+}
+.week-meta-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.hero-chip{display:inline-flex;align-items:center;padding:7px 11px;border-radius:999px;background:var(--sage-soft);color:var(--sage);font-size:10px;font-weight:850}
+.hero-chip.soft{background:#f3f1ec;color:#636d66}
+.week-hero-copy h1{font-size:clamp(34px,4.1vw,54px);margin-bottom:14px;max-width:900px}
+.week-hero-copy p{font-size:15px;line-height:1.8;color:#5f6a63;max-width:900px}
+.project-context-card-v2{
+  margin-top:18px;
+  border-radius:26px;
+  padding:24px 26px;
+  background:linear-gradient(180deg,#f6faf8 0%,#f3f7f5 100%);
+  border:1px solid #dce8e1;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:20px;
+  align-items:center;
+}
+.project-context-card-v2 span{font-size:10px;letter-spacing:.12em;font-weight:900;color:var(--sage)}
+.project-context-card-v2 h2{font-size:31px;margin:10px 0 8px;line-height:1.08}
+.project-context-card-v2 p{font-size:14px;line-height:1.7;max-width:780px;margin:0}
+.week-jump-nav{
+  display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 26px;padding:10px;border-radius:18px;background:rgba(255,255,255,.66);border:1px solid var(--line);backdrop-filter:blur(10px);position:sticky;top:16px;z-index:20;
+}
+.week-jump-nav a{padding:10px 14px;border-radius:12px;background:#fff;border:1px solid #ebe6dd;font-size:12px;font-weight:800;color:#334139;box-shadow:0 3px 10px rgba(23,32,27,.04)}
+.week-jump-nav a:hover{background:#f8f7f2;color:var(--sage)}
+.guided-lab-shell-v2,.research-learning-lab-v2,.linkedin-learning-lab-v2{
+  border-radius:30px;
+  border:1px solid #ece7dc;
+  overflow:hidden;
+}
+.guided-lab-header{
+  padding:34px 36px;
+  background:
+    radial-gradient(circle at 88% 22%, rgba(213,154,52,.18), transparent 20%),
+    linear-gradient(135deg,#12211b 0%,#183128 50%,#224737 100%);
+}
+.guided-label,.research-label{font-size:10px;letter-spacing:.15em}
+.guided-lab-header h2{font-size:clamp(30px,3vw,44px)}
+.guided-lab-header p{font-size:13px;color:rgba(255,255,255,.76);max-width:860px}
+.lab-progress-panel{border-radius:20px;background:rgba(255,255,255,.10);backdrop-filter:blur(12px)}
+.lab-overview-grid{background:#fff}
+.lab-overview-card{padding:24px 26px 22px;background:linear-gradient(180deg,#fff 0%,#fcfbf8 100%)}
+.lab-overview-card small{font-size:9px}
+.lab-overview-card li{font-size:11px;line-height:1.7}
+.tool-chip-row span{padding:8px 11px;font-size:10px;border:1px solid #ece7de;background:#fbfaf7}
+.guided-step-list{padding:18px 18px 24px;background:#fcfbf8}
+.guided-step{
+  grid-template-columns:120px minmax(0,1fr);
+  border-radius:22px;
+  margin:14px 0;
+  border:1px solid #e8e3d9;
+  background:linear-gradient(180deg,#fff 0%,#fdfcfa 100%);
+}
+.guided-step-rail{background:linear-gradient(180deg,#f6f5f1 0%,#f1efe8 100%)}
+.guided-step-details>summary{padding:22px 24px}
+.guided-step-details>summary strong{font-size:20px}
+.guided-step-details>summary em{font-size:11px;line-height:1.6;max-width:760px}
+.guided-step-body{padding:0 24px 24px}
+.guided-actions{display:grid;gap:11px;padding-left:0;list-style:none;counter-reset:action}
+.guided-actions li{display:flex;align-items:flex-start;gap:12px;padding:14px 14px 14px 16px;border:1px solid #ece7dc;border-radius:16px;background:#faf9f5;counter-increment:action}
+.guided-actions li:before{content:counter(action);width:26px;height:26px;border-radius:9px;display:grid;place-items:center;background:#edf4f0;color:var(--sage);font-weight:900;font-size:11px;flex:none;margin-top:1px}
+.guided-actions li span{font-size:12px;line-height:1.72;color:#34413a}
+.command-group{margin-top:18px;border-radius:18px;overflow:hidden;border:1px solid #dde7df}
+.command-group-title{background:#ecf3ef;padding:12px 15px}
+.command-group pre{margin:0;padding:18px 18px 20px;background:#16231d;color:#e9efe9;font-size:12px;overflow:auto}
+.step-verification-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
+.checkpoint-box,.evidence-box{padding:18px 18px 16px;border-radius:18px;border:1px solid #ece6da;background:#fcfbf7}
+.checkpoint-box strong,.evidence-box strong{display:block;font-size:17px;margin:7px 0 6px}
+.checkpoint-box p,.evidence-box p{font-size:12px;line-height:1.72;color:#51605a}
+.lab-final-check{padding:28px 32px 32px;background:linear-gradient(180deg,#fffaf0 0%,#fff 100%);border-top:1px solid #eee5d3}
+.lab-final-check h3{font-size:30px;margin:7px 0 8px}
+.lab-final-check ul{display:grid;grid-template-columns:1fr 1fr;gap:10px 18px;padding-left:0;list-style:none;margin:22px 0 26px}
+.lab-final-check li{display:flex;gap:10px;font-size:12px;line-height:1.7;color:#39453f}
+.lab-final-check li:before{content:"✓";color:#c08517;font-weight:900}
+.research-learning-lab-v2,.linkedin-learning-lab-v2{margin-top:26px;background:linear-gradient(180deg,#fff 0%,#fcfbf7 100%)}
+.research-lab-header,.linkedin-learning-lab header{padding:30px 32px;border-bottom:1px solid #ece7dc;background:linear-gradient(180deg,#fcfcfa 0%,#f7f5ef 100%)}
+.research-query-box{margin:22px 24px 0;border:1px solid #e6e6ef;background:#fbfdff;border-radius:20px}
+.research-query-list code{background:#eef6ff;border:1px solid #d9e8f8;border-radius:12px;padding:11px 12px;color:#174b79}
+.research-step-grid{padding:22px 24px 28px;gap:16px}
+.research-step-grid article,.linkedin-lab-grid article{border:1px solid #e9e3d8;border-radius:20px;background:#fff;box-shadow:0 6px 18px rgba(22,31,26,.04)}
+.research-step-grid article{padding:22px}.research-step-grid article span{width:38px;height:38px;border-radius:13px;background:#edf4f0;color:var(--sage);font-weight:900}
+.research-step-grid article h3{font-size:18px;margin:14px 0 10px}.research-step-grid article ol{padding-left:18px}.research-step-grid article li{font-size:11px;line-height:1.75;color:#46544d}.research-output{margin-top:14px;padding:13px;border-radius:14px;background:#f7f6f2;border:1px solid #ece8de}
+.source-quality-card{margin:0 24px 30px;padding:24px 24px 22px;border:1px solid #e6e1d7;border-radius:22px;background:linear-gradient(180deg,#fff 0%,#fdfbf7 100%)}
+.source-quality-card h3{font-size:24px;margin:7px 0 0}.source-quality-card ul{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px;padding-left:0;list-style:none;margin:18px 0 0}.source-quality-card li{font-size:12px;color:#45514b;line-height:1.7}.source-quality-card li:before{content:"•";color:var(--sage);font-weight:900;margin-right:8px}
+.linkedin-learning-lab header{display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center}.linkedin-lab-icon{width:48px;height:48px;border-radius:15px;display:grid;place-items:center;background:#0a66c2;color:#fff;font-family:Arial,sans-serif;font-weight:700;box-shadow:inset 0 -7px 12px rgba(0,0,0,.08)}
+.linkedin-learning-lab header span{font-size:10px;font-weight:900;letter-spacing:.14em;color:#0a66c2}.linkedin-learning-lab header h2{font-size:32px;margin:8px 0 6px}.linkedin-learning-lab header p{font-size:13px;line-height:1.7;max-width:760px}.linkedin-learning-lab header em{display:inline-flex;align-items:center;padding:8px 11px;border-radius:999px;background:#edf5ff;color:#0a66c2;font-style:normal;font-size:11px;font-weight:800}
+.linkedin-lab-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:22px 24px 28px}.linkedin-lab-grid article{padding:22px}.linkedin-lab-grid ol{padding-left:18px}.linkedin-lab-grid li{font-size:12px;line-height:1.76;color:#45514b}
+.assignment-grid-v2{gap:18px}
+.assignment-grid-v2 .assignment-card-modern{
+  min-height:400px;
+  border-radius:24px;
+  padding:24px;
+  border:1px solid #e9e3d7;
+  background:linear-gradient(180deg,#fff 0%,#fcfbf7 100%);
+}
+.assignment-grid-v2 .assignment-card-head{margin-bottom:10px}
+.assignment-grid-v2 .assignment-icon{width:42px;height:42px;border-radius:13px;font-size:12px}
+.assignment-grid-v2 .pill{font-size:10px;padding:8px 10px}
+.assignment-grid-v2 h3{font-size:24px;line-height:1.25;margin:20px 0 10px}
+.assignment-grid-v2>article>p{font-size:12px;line-height:1.76;color:#57655e}
+.assignment-grid-v2 .deliverable-modern{padding:15px 16px;border-radius:16px;border:1px solid #ece6db;background:#f8f7f2}
+.assignment-grid-v2 .deliverable-modern span{font-size:11px;line-height:1.7}
+
+@media(max-width:1100px){
+  .project-week-grid-v2,.assignment-grid-v2{grid-template-columns:1fr 1fr}
+  .step-verification-grid,.source-quality-card ul,.lab-final-check ul{grid-template-columns:1fr}
+}
+@media(max-width:900px){
+  .week-hero-v2,.project-context-card-v2{grid-template-columns:1fr}
+  .week-jump-nav{position:static;top:auto}
+  .guided-step{grid-template-columns:1fr}
+  .guided-step-rail{border-right:0;border-bottom:1px solid #e8e3d9;flex-direction:row;justify-content:space-between;padding:16px 18px}
+  .guided-step-list,.research-step-grid,.linkedin-lab-grid,.assignment-grid-v2{grid-template-columns:1fr}
+  .project-week-grid-v2,.assignment-grid-v2{grid-template-columns:1fr}
+  .lab-overview-grid{grid-template-columns:1fr}
+  .lab-overview-card,.lab-overview-card:nth-child(2),.lab-overview-card.prerequisites-card{grid-column:auto;border-right:0}
+  .source-quality-card ul{grid-template-columns:1fr}
+}
+@media(max-width:650px){
+  .curriculum-hero-v2,.week-hero-v2,.guided-lab-shell-v2,.research-learning-lab-v2,.linkedin-learning-lab-v2,.project-context-card-v2{border-radius:22px}
+  .curriculum-hero-v2,.week-hero-v2{padding:26px 22px}
+  .week-hero-copy h1{font-size:32px}
+  .project-context-card-v2 h2{font-size:26px}
+  .guided-lab-header,.research-lab-header,.linkedin-learning-lab header{padding:24px 22px}
+  .lab-overview-card,.guided-step-body,.research-step-grid,.linkedin-lab-grid,.source-quality-card,.lab-final-check{padding-left:20px;padding-right:20px}
+  .guided-step-details>summary{padding:18px 18px 16px}
+  .guided-step-details>summary strong{font-size:18px}
+  .lab-final-check h3,.linkedin-learning-lab header h2,.source-quality-card h3{font-size:23px}
+  .week-jump-nav{padding:8px}
+  .week-jump-nav a{flex:1 1 calc(50% - 10px);text-align:center}
+}
