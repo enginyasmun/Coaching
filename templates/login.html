@@ -1,34 +1,77 @@
 {% extends "base.html" %}
 {% block title %}Sign in | Developer Academy{% endblock %}
 {% block public_content %}
-<section class="login-layout">
-  <div class="login-story">
+<section class="login-layout login-layout-v2">
+  <div class="login-story login-story-v2">
     <a class="login-back" href="{{ url_for('home') }}">← Back to academy</a>
     <div class="login-story-copy">
       <div class="hero-kicker light-kicker"><span></span>Salesforce Junior Developer Academy</div>
-      <h1>Learning becomes valuable when it becomes <em>visible work.</em></h1>
-      <p>Your dashboard brings curriculum, projects, research, feedback, grades, and professional development into one focused workspace.</p>
-      <div class="login-points">
+      <h1>Turn every week of learning into <em>visible professional growth.</em></h1>
+      <p>Your workspace connects curriculum, technical projects, independent research, mentor feedback, grades, and professional communication.</p>
+      <div class="login-points login-points-v2">
         <div><b>01</b><span><strong>Build every week</strong><small>Move from concepts to working Salesforce solutions.</small></span></div>
-        <div><b>02</b><span><strong>Receive direct feedback</strong><small>Improve through review, revision, and clear expectations.</small></span></div>
-        <div><b>03</b><span><strong>Create a professional portfolio</strong><small>Graduate with evidence of technical and communication skills.</small></span></div>
+        <div><b>02</b><span><strong>Improve through feedback</strong><small>Review, revise, and strengthen every important deliverable.</small></span></div>
+        <div><b>03</b><span><strong>Graduate with evidence</strong><small>Create a portfolio of technical work, research, and communication.</small></span></div>
       </div>
+      <div class="login-story-badge"><span>20</span><div><strong>weeks of guided development</strong><small>One connected learning experience</small></div></div>
     </div>
   </div>
-  <div class="login-panel">
-    <form class="login-card" method="post">
-      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-      <div class="login-mark">SF</div>
-      <div class="form-heading"><small>WELCOME BACK</small><h2>Sign in to your workspace</h2><p>Use the account provided by your instructor.</p></div>
-      <label class="field-label">Email address
-        <span class="input-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm8 7 8-5H4l8 5Zm0 2L4 8v10h16V8l-8 5Z"/></svg><input type="email" name="email" required autocomplete="email" placeholder="name@example.com"></span>
-      </label>
-      <label class="field-label">Password
-        <span class="input-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10V8a5 5 0 0 1 10 0v2h1a2 2 0 0 1 2 2v8H4v-8a2 2 0 0 1 2-2h1Zm2 0h6V8a3 3 0 0 0-6 0v2Zm2 4v3h2v-3h-2Z"/></svg><input type="password" name="password" required autocomplete="current-password" placeholder="Enter your password"></span>
-      </label>
-      <button class="button full large" type="submit">Sign in securely <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m13 5-1.4 1.4 4.6 4.6H4v2h12.2l-4.6 4.6L13 19l7-7-7-7Z"/></svg></button>
-      <p class="form-footnote">Account access is managed by the academy instructor.</p>
-    </form>
+
+  <div class="login-panel login-panel-v2">
+    <div class="login-panel-shell">
+      <div class="login-mobile-brand">
+        <span class="login-mark small-login-mark">SF</span>
+        <div><strong>Developer Academy</strong><small>Secure student and instructor access</small></div>
+      </div>
+
+      <form class="login-card login-card-v2" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <div class="login-card-top">
+          <div class="login-mark">SF</div>
+          <span class="secure-access-pill"><i></i> Secure academy access</span>
+        </div>
+        <div class="form-heading form-heading-v2">
+          <small>WELCOME BACK</small>
+          <h2>Sign in to your workspace</h2>
+          <p>Use the academy account provided by your instructor.</p>
+        </div>
+
+        <div class="login-field-group">
+          <label for="login-email">Email address</label>
+          <div class="login-input-shell">
+            <span class="login-input-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm8 7 8-5H4l8 5Zm0 2L4 8v10h16V8l-8 5Z"/></svg>
+            </span>
+            <input id="login-email" type="email" name="email" required autocomplete="email" inputmode="email" placeholder="you@example.com">
+          </div>
+          <small>Enter the email connected to your academy account.</small>
+        </div>
+
+        <div class="login-field-group">
+          <div class="login-label-row"><label for="login-password">Password</label><span>Case sensitive</span></div>
+          <div class="login-input-shell">
+            <span class="login-input-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M7 10V8a5 5 0 0 1 10 0v2h1a2 2 0 0 1 2 2v8H4v-8a2 2 0 0 1 2-2h1Zm2 0h6V8a3 3 0 0 0-6 0v2Zm2 4v3h2v-3h-2Z"/></svg>
+            </span>
+            <input id="login-password" type="password" name="password" required autocomplete="current-password" placeholder="Enter your password">
+            <button class="password-toggle" type="button" data-password-toggle aria-label="Show password" aria-pressed="false">
+              <svg class="eye-open" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5c5.5 0 9.4 4.2 10 7-.6 2.8-4.5 7-10 7S2.6 14.8 2 12c.6-2.8 4.5-7 10-7Zm0 2c-4 0-7 2.9-7.8 5 .8 2.1 3.8 5 7.8 5s7-2.9 7.8-5C19 9.9 16 7 12 7Zm0 2.5A2.5 2.5 0 1 1 12 14.5a2.5 2.5 0 0 1 0-5Z"/></svg>
+              <svg class="eye-closed" viewBox="0 0 24 24" aria-hidden="true"><path d="m3.3 2 18.7 18.7-1.3 1.3-3.2-3.2A11.8 11.8 0 0 1 12 20C6.5 20 2.6 15.8 2 13c.3-1.4 1.4-3.2 3-4.7L2 3.3 3.3 2Zm3.1 7.7A8.7 8.7 0 0 0 4.2 13c.8 2.1 3.8 5 7.8 5 1.4 0 2.7-.4 3.8-1l-2-2a3.5 3.5 0 0 1-4.8-4.8L6.4 9.7ZM12 6c5.5 0 9.4 4.2 10 7-.3 1.3-1.2 2.8-2.5 4.1l-1.4-1.4c.8-.9 1.4-1.8 1.7-2.7-.8-2.1-3.8-5-7.8-5-.8 0-1.6.1-2.3.3L8.1 6.7C9.3 6.2 10.6 6 12 6Z"/></svg>
+            </button>
+          </div>
+          <small>Your password is encrypted and never displayed.</small>
+        </div>
+
+        <button class="button full large login-submit-button" type="submit">Sign in securely
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m13 5-1.4 1.4 4.6 4.6H4v2h12.2l-4.6 4.6L13 19l7-7-7-7Z"/></svg>
+        </button>
+
+        <div class="login-trust-row">
+          <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3Zm0 2.2L18 6.5V11c0 3.8-2.4 7.3-6 8.8-3.6-1.5-6-5-6-8.8V6.5l6-2.3Zm-1 4.3v5l4-2.5-4-2.5Z"/></svg>Protected session</span>
+          <span>Account access managed by your instructor</span>
+        </div>
+      </form>
+    </div>
   </div>
 </section>
 {% endblock %}

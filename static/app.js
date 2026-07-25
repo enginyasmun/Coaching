@@ -38,4 +38,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const id = select.dataset.tableFilter;
     select.addEventListener("change", () => updateTable(id));
   });
+
+
+  document.querySelectorAll("[data-password-toggle]").forEach(button => {
+    const wrapper = button.closest(".login-input-shell");
+    const input = wrapper?.querySelector('input[type="password"], input[data-password-field]');
+    if (!input) return;
+    button.addEventListener("click", () => {
+      const showing = input.type === "text";
+      input.type = showing ? "password" : "text";
+      button.setAttribute("aria-pressed", String(!showing));
+      button.setAttribute("aria-label", showing ? "Show password" : "Hide password");
+      input.focus();
+    });
+  });
+
 });
