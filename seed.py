@@ -144,7 +144,7 @@ with get_db() as conn:
     )
     conn.execute(
         "INSERT INTO users (name,email,password_hash,role,cohort,is_active,created_at) VALUES (?,?,?,?,?,?,?)",
-        (os.environ.get("DEMO_STUDENT_NAME", "Demo Student"), os.environ.get("DEMO_STUDENT_EMAIL", "student@example.com"), generate_password_hash(os.environ.get("DEMO_STUDENT_PASSWORD", "Student123!")), "student","Cohort 1",1,now)
+        (os.environ.get("DEMO_STUDENT_NAME", "Demo Student"), os.environ.get("DEMO_STUDENT_EMAIL", "student@example.com"), generate_password_hash(os.environ.get("DEMO_STUDENT_PASSWORD", "Student123!")), "student","Class 1",1,now)
     )
 
     start = date.today()

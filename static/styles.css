@@ -115,3 +115,62 @@
   .landing-hero-v2{padding:42px 19px 55px}.hero-copy-v2 h1{font-size:42px}.hero-copy-v2 h1 em{text-decoration-thickness:4px}.hero-status-row{align-items:flex-start;flex-direction:column}.hero-proof-v2{display:grid;grid-template-columns:1fr}.hero-proof-v2 div{border-right:0;border-bottom:1px solid rgba(28,42,33,.08);padding:15px 17px}.hero-proof-v2 div:last-child{border-bottom:0}.hero-product-v2{padding:38px 0 22px}.product-label{left:15px}.hero-mini-card{display:none}.outcome-band{padding:20px 18px 0}.outcome-band article{padding:21px}.feature-grid-v2 .feature-card{min-height:300px}.landing-cta-v2{width:calc(100% - 36px)}
   .login-panel-v2{padding:24px 17px}.login-card-v2{padding:34px 22px 28px;border-radius:22px}.login-card-top{align-items:flex-start}.secure-access-pill{font-size:7px}.form-heading-v2 h2{font-size:27px}.login-input-shell{height:54px}.login-input-icon{width:48px}.login-trust-row{align-items:flex-start;flex-direction:column;gap:7px}.login-mobile-brand{margin-left:4px}
 }
+
+
+/* Classes and instructor-management update */
+.hero-button-group{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.inline-class-form{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  min-width:190px;
+}
+
+.inline-class-form input{
+  width:130px;
+  min-width:0;
+  margin:0;
+  padding:8px 9px;
+  border-radius:9px;
+  font-size:10px;
+  background:#fbfbf9;
+}
+
+.current-account-chip{
+  display:inline-flex;
+  align-items:center;
+  border-radius:999px;
+  padding:6px 9px;
+  background:var(--sage-soft);
+  color:var(--sage);
+  font-size:9px;
+  font-weight:850;
+  white-space:nowrap;
+}
+
+.instructor-access-panel .access-icon{
+  color:#ffffff;
+  background:rgba(255,255,255,.11);
+}
+
+@media(max-width:650px){
+  .hero-button-group{
+    width:100%;
+    align-items:stretch;
+    flex-direction:column;
+  }
+
+  .hero-button-group .button{
+    width:100%;
+  }
+
+  .inline-class-form{
+    min-width:220px;
+  }
+}

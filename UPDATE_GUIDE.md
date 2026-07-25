@@ -1,56 +1,45 @@
-# Landing and Login Design Refresh
+# Classes and Instructor Management Update
 
-This update changes only the public landing page and login experience. It does not modify the database, curriculum, accounts, submissions, grades, or instructor logic.
+This update:
 
-## Files included
+1. Moves the dark green technology bar below the three white outcome cards.
+2. Renames visible **Cohort** terminology to **Class**.
+3. Adds instructor account management.
 
-- `templates/landing.html`
-- `templates/login.html`
-- `static/styles.css`
-- `static/app.js`
+## Add instructors
 
-## What changed
+After installing:
 
-### Landing page
+1. Sign in as an instructor.
+2. Click **Instructors** in the left navigation.
+3. Enter the instructor's name, email, and temporary password.
+4. Click **Create instructor account**.
+5. Send the credentials privately.
 
-- Centered maximum-width layout for large monitors
-- Stronger headline and content hierarchy
-- Cleaner program metrics
-- Refined dashboard preview presentation
-- New academy outcome band
-- More polished program cards
-- Improved spacing, visual depth, and responsive behavior
+Every active instructor has full academy access.
 
-### Login page
+The website prevents you from deactivating your own account and prevents deactivation of the final active instructor.
 
-- Removed the doubled input borders
-- Added dedicated email and password icon areas
-- Added clearer labels and helper text
-- Added stronger hover and keyboard-focus states
-- Added a show/hide password button
-- Improved mobile layout and login-card hierarchy
-- Added protected-session messaging
+## Classes
+
+The database field remains named `cohort` internally so the update is compatible with your existing database. The website displays **Class**.
+
+On the Students page, each student now has an editable Class field. You can change an existing value such as `Cohort 1` to `Class 1` and click **Save**.
 
 ## Upload to GitHub
 
-1. Extract `Coaching_Landing_Login_Refresh.zip`.
-2. Open `enginyasmun/Coaching` on GitHub.
-3. Select **Add file → Upload files**.
-4. Drag the `templates` and `static` folders from the extracted update into GitHub.
-5. GitHub should show these existing files as modified:
-   - `templates/landing.html`
-   - `templates/login.html`
-   - `static/styles.css`
-   - `static/app.js`
-6. Use commit message:
+Upload these items to the root of `enginyasmun/Coaching`:
 
-   `Improve landing and login design`
+- `app.py`
+- `seed.py`
+- `templates`
+- `static`
 
-7. Commit directly to `main`.
+Commit message:
+
+`Add classes and instructor management`
 
 ## Update PythonAnywhere
-
-Open a Bash console and run:
 
 ```bash
 cd ~/Coaching
@@ -59,12 +48,10 @@ git pull origin main
 
 Then open the PythonAnywhere **Web** tab and click **Reload**.
 
-Open the website and force-refresh the browser:
-
-- Windows: `Ctrl + F5`
-- macOS: `Command + Shift + R`
+Press `Ctrl + F5` on the website.
 
 ## Important
 
-Do not run `RESET_DB=1 python seed.py` for this design update.
-Do not delete `academy.db`.
+Do not run `RESET_DB=1 python seed.py`.
+
+Do not delete `academy.db`. Your existing accounts, students, assignments, grades, and submissions remain intact.

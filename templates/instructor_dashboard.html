@@ -3,7 +3,10 @@
 {% block content %}
 <section class="dashboard-hero">
   <div><span class="page-kicker">INSTRUCTOR DASHBOARD</span><h1>Academy overview</h1><p>Review the health of the program, focus on work awaiting attention, and keep every student moving forward.</p></div>
-  <a class="button" href="{{ url_for('manage_students') }}">Add student <svg viewBox="0 0 24 24"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6V5Z"/></svg></a>
+  <div class="hero-button-group">
+    <a class="button ghost" href="{{ url_for('manage_instructors') }}">Add instructor</a>
+    <a class="button" href="{{ url_for('manage_students') }}">Add student <svg viewBox="0 0 24 24"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6V5Z"/></svg></a>
+  </div>
 </section>
 
 <section class="stats-grid modern-stats">
@@ -15,7 +18,7 @@
 
 <section class="quick-action-grid">
   <a class="quick-action sage-action" href="{{ url_for('submissions_list', status='Submitted') }}"><span class="quick-icon"><svg viewBox="0 0 24 24"><path d="M7 3h10a2 2 0 0 1 2 2v16l-7-3-7 3V5a2 2 0 0 1 2-2Zm2 5v2h6V8H9Zm0 4v2h6v-2H9Z"/></svg></span><div><small>PRIMARY WORKFLOW</small><h3>Review submissions</h3><p>Open student work waiting for grading and written feedback.</p></div><span class="arrow-circle">→</span></a>
-  <a class="quick-action amber-action" href="{{ url_for('manage_students') }}"><span class="quick-icon"><svg viewBox="0 0 24 24"><path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm6 2a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM2 21a7 7 0 0 1 14 0H2Zm13.5-6c3.6 0 6.5 2.2 6.5 5v1h-4.1a9 9 0 0 0-2.4-6Z"/></svg></span><div><small>COHORT MANAGEMENT</small><h3>Manage students</h3><p>Create accounts, monitor progress, and control access.</p></div><span class="arrow-circle">→</span></a>
+  <a class="quick-action amber-action" href="{{ url_for('manage_students') }}"><span class="quick-icon"><svg viewBox="0 0 24 24"><path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm6 2a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM2 21a7 7 0 0 1 14 0H2Zm13.5-6c3.6 0 6.5 2.2 6.5 5v1h-4.1a9 9 0 0 0-2.4-6Z"/></svg></span><div><small>CLASS MANAGEMENT</small><h3>Manage students</h3><p>Create accounts, monitor progress, and control access.</p></div><span class="arrow-circle">→</span></a>
   <a class="quick-action coral-action" href="{{ url_for('manage_assignments') }}"><span class="quick-icon"><svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm8 1.5V8h4.5L14 3.5ZM8 12v2h8v-2H8Zm0 4v2h8v-2H8Z"/></svg></span><div><small>PROGRAM CATALOG</small><h3>Review assignments</h3><p>See every hands-on, research, and LinkedIn deliverable.</p></div><span class="arrow-circle">→</span></a>
 </section>
 

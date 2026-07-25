@@ -37,7 +37,7 @@
       <div class="next-row"><span class="week-chip">W{{ ns.next_item.week_number }}</span><div><h3>{{ ns.next_item.title }}</h3><p>{{ ns.next_item.week_title }}</p></div></div>
       <a class="button secondary full" href="{{ url_for('student_assignment', assignment_id=ns.next_item.id) }}">Continue assignment</a>
     {% else %}
-      <div class="empty-success"><span>✓</span><h3>Everything is approved.</h3><p>Excellent work. Review the curriculum or prepare for the next cohort milestone.</p></div>
+      <div class="empty-success"><span>✓</span><h3>Everything is approved.</h3><p>Excellent work. Review the curriculum or prepare for the next class milestone.</p></div>
     {% endif %}
   </article>
 </section>

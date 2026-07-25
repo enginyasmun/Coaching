@@ -412,7 +412,7 @@ def manage_students():
         name = request.form.get("name", "").strip()
         email = request.form.get("email", "").strip().lower()
         password = request.form.get("password", "").strip()
-        cohort = request.form.get("cohort", "").strip()
+        class_name = request.form.get("class_name", "").strip()
         if not name or not email or not password:
             flash("Name, email, and temporary password are required.", "danger")
         elif query_one("SELECT id FROM users WHERE lower(email)=?", (email,)):
@@ -423,7 +423,7 @@ def manage_students():
                 INSERT INTO users (name, email, password_hash, role, cohort, is_active, created_at)
                 VALUES (?, ?, ?, 'student', ?, 1, ?)
                 """,
-                (name, email, generate_password_hash(password), cohort, datetime.utcnow().isoformat(timespec="seconds"))
+                (name, email, generate_password_hash(password), class_name, datetime.utcnow().isoformat(timespec="seconds"))
             )
             flash("Student account created.", "success")
             return redirect(url_for("manage_students"))
@@ -442,6 +442,85 @@ def manage_students():
         """
     )
     return render_template("manage_students.html", students=students)
+
+
+@app.route("/instructor/student/<int:user_id>/class", methods=["POST"])
+@role_required("instructor")
+def update_student_class(user_id):
+    student = query_one("SELECT * FROM users WHERE id=? AND role='student'", (user_id,))
+    if not student:
+        abort(404)
+
+    class_name = request.form.get("class_name", "").strip()
+    execute("UPDATE users SET cohort=? WHERE id=?", (class_name, user_id))
+    flash("Student class updated.", "success")
+    return redirect(url_for("manage_students"))
+
+
+@app.route("/instructor/instructors", methods=["GET", "POST"])
+@role_required("instructor")
+def manage_instructors():
+    if request.method == "POST":
+        name = request.form.get("name", "").strip()
+        email = request.form.get("email", "").strip().lower()
+        password = request.form.get("password", "").strip()
+
+        if not name or not email or not password:
+            flash("Name, email, and temporary password are required.", "danger")
+        elif query_one("SELECT id FROM users WHERE lower(email)=?", (email,)):
+            flash("A user with this email already exists.", "danger")
+        else:
+            execute(
+                """
+                INSERT INTO users (name, email, password_hash, role, cohort, is_active, created_at)
+                VALUES (?, ?, ?, 'instructor', NULL, 1, ?)
+                """,
+                (
+                    name,
+                    email,
+                    generate_password_hash(password),
+                    datetime.utcnow().isoformat(timespec="seconds"),
+                ),
+            )
+            flash("Instructor account created.", "success")
+            return redirect(url_for("manage_instructors"))
+
+    instructors = query_all(
+        """
+        SELECT *
+        FROM users
+        WHERE role='instructor'
+        ORDER BY is_active DESC, name
+        """
+    )
+    return render_template("manage_instructors.html", instructors=instructors)
+
+
+@app.route("/instructor/instructor/<int:user_id>/toggle", methods=["POST"])
+@role_required("instructor")
+def toggle_instructor(user_id):
+    instructor = query_one("SELECT * FROM users WHERE id=? AND role='instructor'", (user_id,))
+    if not instructor:
+        abort(404)
+
+    if user_id == session["user_id"]:
+        flash("You cannot deactivate your own instructor account.", "warning")
+        return redirect(url_for("manage_instructors"))
+
+    if instructor["is_active"]:
+        active_count = query_one(
+            "SELECT COUNT(*) AS total FROM users WHERE role='instructor' AND is_active=1"
+        )["total"]
+        if active_count <= 1:
+            flash("At least one active instructor account is required.", "warning")
+            return redirect(url_for("manage_instructors"))
+
+    execute(
+        "UPDATE users SET is_active=? WHERE id=?",
+        (0 if instructor["is_active"] else 1, user_id),
+    )
+    flash("Instructor status updated.", "success")
+    return redirect(url_for("manage_instructors"))
 
 
 @app.route("/instructor/student/<int:user_id>/toggle", methods=["POST"])
